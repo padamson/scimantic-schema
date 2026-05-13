@@ -1,0 +1,7 @@
+[schema]
+name = "scimantic"
+version = "0.1.0"
+linkml = "1.7.0"
+
+[files]
+main = "schema/scimantic.yaml"

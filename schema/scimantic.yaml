@@ -2,7 +2,7 @@ id: http://scimantic.io/schema
 name: scimantic
 description: A minimal domain ontology for representing the scientific method as provenance chains.
 license: https://creativecommons.org/licenses/by/4.0/
-version: 0.1.3
+version: 0.1.0
 
 prefixes:
   scimantic: http://scimantic.io/
