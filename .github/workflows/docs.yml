@@ -1,0 +1,62 @@
+name: Build and publish HTML docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve latest panschema main SHA
+        id: panschema
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha=$(gh api repos/padamson/panschema/commits/main --jq .sha)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache panschema binary
+        id: cache-panschema
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/panschema
+          key: panschema-${{ runner.os }}-${{ steps.panschema.outputs.sha }}
+
+      - name: Install panschema from main
+        if: steps.cache-panschema.outputs.cache-hit != 'true'
+        run: |
+          cargo install --git https://github.com/padamson/panschema \
+            --rev ${{ steps.panschema.outputs.sha }} \
+            panschema
+
+      - name: Generate HTML docs
+        run: panschema generate -i schema/scimantic.yaml -o site/ -f html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
