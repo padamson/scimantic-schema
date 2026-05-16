@@ -37,6 +37,18 @@ jobs:
           path: ~/.cargo/bin/panschema
           key: panschema-${{ runner.os }}-${{ steps.panschema.outputs.sha }}
 
+      - name: Cache wasm-pack binary
+        if: steps.cache-panschema.outputs.cache-hit != 'true'
+        id: cache-wasm-pack
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/wasm-pack
+          key: wasm-pack-${{ runner.os }}
+
+      - name: Install wasm-pack
+        if: steps.cache-panschema.outputs.cache-hit != 'true' && steps.cache-wasm-pack.outputs.cache-hit != 'true'
+        run: cargo install wasm-pack
+
       - name: Install panschema from main
         if: steps.cache-panschema.outputs.cache-hit != 'true'
         run: |
