@@ -1,6 +1,6 @@
 [schema]
 name = "scimantic"
-version = "0.1.0"
+version = "0.2.0"
 linkml = "1.7.0"
 
 [files]

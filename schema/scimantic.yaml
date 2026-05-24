@@ -1,12 +1,17 @@
 id: http://scimantic.io/schema
 name: scimantic
-description: A minimal domain ontology for representing the scientific method as provenance chains.
+description: >-
+  A domain ontology for representing the scientific method as a chain
+  of BFO/CCO processes and information content entities. v0.2.0 re-grounds the
+  schema in the Basic Formal Ontology (BFO, ISO/IEC 21838-2:2020) and the
+  Common Core Ontologies (CCO), replacing the prior PROV-O grounding.
 license: https://creativecommons.org/licenses/by/4.0/
-version: 0.1.0
+version: 0.2.0
 
 prefixes:
   scimantic: http://scimantic.io/
-  prov: http://www.w3.org/ns/prov#
+  obo: http://purl.obolibrary.org/obo/
+  cco: https://www.commoncoreontologies.org/
   dcterms: http://purl.org/dc/terms/
   xsd: http://www.w3.org/2001/XMLSchema#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -23,215 +28,234 @@ imports:
   - linkml:types
 
 classes:
-  # ---------------------------------------------------------
-  # Root Classes (Mapping to PROV)
-  # ---------------------------------------------------------
-  Entity:
-    class_uri: prov:Entity
-    description: A provenance entity. Identified by its RDF URI.
-    slots: []
+  # ===========================================================
+  # BFO Upper-Level Wrappers
+  # Thin wrappers carrying canonical BFO IRIs. Domain classes
+  # inherit from these via is_a so OWL output has correct BFO
+  # ancestry while scimantic.yaml stays human-readable.
+  # ===========================================================
+  BFOEntity:
+    class_uri: obo:BFO_0000001
+    description: BFO entity (root).
 
-  Activity:
-    class_uri: prov:Activity
-    description: A provenance activity. Identified by its RDF URI.
-    slots: []
+  BFOContinuant:
+    is_a: BFOEntity
+    class_uri: obo:BFO_0000002
+    description: BFO continuant. Persists through time while maintaining identity.
+
+  BFOOccurrent:
+    is_a: BFOEntity
+    class_uri: obo:BFO_0000003
+    description: BFO occurrent. Unfolds in time.
+
+  BFOSpecificallyDependentContinuant:
+    is_a: BFOContinuant
+    class_uri: obo:BFO_0000020
+    description: BFO specifically dependent continuant. Inheres in a specific independent continuant.
+
+  BFOGenericallyDependentContinuant:
+    is_a: BFOContinuant
+    class_uri: obo:BFO_0000031
+    description: BFO generically dependent continuant (e.g., information content).
+
+  BFOQuality:
+    is_a: BFOSpecificallyDependentContinuant
+    class_uri: obo:BFO_0000019
+    description: BFO quality.
+
+  BFOProcess:
+    is_a: BFOOccurrent
+    class_uri: obo:BFO_0000015
+    description: BFO process.
+
+  # ===========================================================
+  # CCO Mid-Level Wrappers
+  # ===========================================================
+  InformationContentEntity:
+    is_a: BFOGenericallyDependentContinuant
+    class_uri: cco:ont00000958
+    description: CCO Information Content Entity (ICE).
+
+  DescriptiveICE:
+    is_a: InformationContentEntity
+    class_uri: cco:ont00000853
+    description: CCO Descriptive Information Content Entity. Describes some aspect of reality.
+
+  DesignativeICE:
+    is_a: InformationContentEntity
+    class_uri: cco:ont00000686
+    description: CCO Designative Information Content Entity. Designates (names/identifies) some entity.
+
+  DirectiveICE:
+    is_a: InformationContentEntity
+    class_uri: cco:ont00000965
+    description: CCO Prescriptive (a.k.a. Directive) Information Content Entity. Prescribes some behavior, state, or plan.
+
+  Act:
+    is_a: BFOProcess
+    class_uri: cco:ont00000005
+    description: CCO Act. A process with an agent participant.
+    slots:
+      - status
+
+  PlannedAct:
+    is_a: Act
+    class_uri: cco:ont00000228
+    description: >-
+      CCO Planned Act. An Act prescribed by a plan specification (intentional,
+      agent-driven), in contrast to natural processes. NOTE: "Planned" denotes
+      intentionality, NOT lifecycle phase. A PlannedAct individual spans its
+      design, execution, and completion as a single occurrent; lifecycle state
+      is captured by the [[ActStatus]] enum on the `status` slot, not by class.
+
+  ActOfObservation:
+    is_a: PlannedAct
+    class_uri: cco:ont00000037
+    description: CCO Act of Observation.
+
+  ActOfEstimation:
+    is_a: PlannedAct
+    class_uri: cco:ont00000078
+    description: CCO Act of Estimation.
+
+  ActOfInformationProcessing:
+    is_a: PlannedAct
+    class_uri: cco:ont00000366
+    description: CCO Act of Information Processing.
+
+  ActOfPlanning:
+    is_a: PlannedAct
+    class_uri: cco:ont00000511
+    description: CCO Act of Planning.
 
   Agent:
-    class_uri: prov:Agent
-    description: A provenance agent. Identified by its RDF URI.
+    is_a: BFOContinuant
+    class_uri: cco:ont00001017
+    description: CCO Agent. A material entity capable of intentional action.
 
-  # ---------------------------------------------------------
-  # Scimantic Entities
-  # ---------------------------------------------------------
+  # ===========================================================
+  # Scimantic ICE-based Entities
+  # ===========================================================
   Question:
-    is_a: Entity
+    is_a: DirectiveICE
     class_uri: scimantic:Question
-    description: An interrogative sentence representing the research query.
+    description: >-
+      An interrogative ICE representing a research query. As a directive,
+      a Question prescribes inquiry behaviors (e.g., a LiteratureSearch).
     slots:
       - label
-      - wasGeneratedBy
-      - motivates
-      - wasDerivedFrom
-      - wasAttributedTo
+      - isOutputOf
+      - prescribes
     slot_usage:
-      wasGeneratedBy:
+      isOutputOf:
         range: QuestionFormation
-        required: false
-      motivates:
+        required: true
+      prescribes:
         range: LiteratureSearch
-      wasDerivedFrom:
-        any_of:
-          - range: Question
-          - range: Annotation
-          - range: Evidence
         multivalued: true
-        description: Questions can be derived from prior questions (refinement), annotations/highlights in literature, or evidence claims.
 
-  # ---------------------------------------------------------
-  # Scimantic Activities
-  # ---------------------------------------------------------
-  QuestionFormation:
-    is_a: Activity
-    class_uri: scimantic:QuestionFormation
-    description: The activity of creating or refining a Research Question. Can be informed by prior results (iterating on findings) or by literature search (refining questions based on discovered evidence).
+  Hypothesis:
+    is_a: DescriptiveICE
+    mixins:
+      - Nanopublication
+    class_uri: scimantic:Hypothesis
+    description: A testable claim about the world, synthesized from one or more Premises.
     slots:
-      - wasAssociatedWith
-      - wasInformedBy
+      - label
+      - isOutputOf
     slot_usage:
-      wasInformedBy:
-        any_of:
-          - range: ResultAssessment
-          - range: LiteratureSearch
-        required: false
-
-  LiteratureSearch:
-    is_a: Activity
-    class_uri: scimantic:LiteratureSearch
-    description: The activity of searching literature and creating Annotations (highlights, notes) on source text.
-    slots:
-      - wasAssociatedWith
-      - wasInformedBy
-    slot_usage:
-      wasInformedBy:
-        range: QuestionFormation
-
-  EvidenceExtraction:
-    is_a: Activity
-    class_uri: scimantic:EvidenceExtraction
-    description: The activity of articulating Evidence claims from one or more Annotations. Separates the act of reading/highlighting from the act of formulating evidence statements.
-    slots:
-      - used
-      - wasAssociatedWith
-      - wasInformedBy
-    slot_usage:
-      used:
-        range: Annotation
-        multivalued: true
-        description: The annotations from which evidence is extracted.
-      wasInformedBy:
-        range: LiteratureSearch
+      isOutputOf:
+        range: HypothesisFormation
+        required: true
 
   Evidence:
-    is_a: Entity
+    is_a: DescriptiveICE
     mixins:
       - URREFEvidence
       - Nanopublication
       - UncertaintySubject
     class_uri: scimantic:Evidence
-    description: A factual claim extracted from a source.
+    description: A descriptive ICE articulating a factual claim extracted from one or more Annotations.
     slots:
       - label
       - content
       - citation
       - source
-      - wasGeneratedBy
-      - wasDerivedFrom
-      - wasAttributedTo
+      - isOutputOf
       - accessLevel
       - publishable
       - supports
       - contradicts
       - hasUncertainty
     slot_usage:
-      wasDerivedFrom:
-        any_of:
-          - range: Question
-          - range: Annotation
-        multivalued: true
-        description: Evidence can be derived from research questions or from annotations/highlights in literature.
-      wasGeneratedBy:
+      isOutputOf:
         range: EvidenceExtraction
+        required: true
       supports:
         range: Hypothesis
       contradicts:
         range: Hypothesis
 
-  Hypothesis:
-    is_a: Entity
-    mixins:
-      - Nanopublication
-    class_uri: scimantic:Hypothesis
-    description: A testable claim derived from evidence.
+  Premise:
+    is_a: DescriptiveICE
+    class_uri: scimantic:Premise
+    description: An evaluated proposition derived from Evidence via an EvidenceAssessment.
     slots:
       - label
-      - wasGeneratedBy
-      - wasDerivedFrom
-      - wasAttributedTo
+      - isOutputOf
     slot_usage:
-      wasGeneratedBy:
-        range: HypothesisFormation
-      wasDerivedFrom:
-        range: Premise
-        multivalued: true
+      isOutputOf:
+        range: EvidenceAssessment
+        required: true
 
   ExperimentalMethod:
-    is_a: Entity
+    is_a: DirectiveICE
     class_uri: scimantic:ExperimentalMethod
-    description: A specification of the experimental or computational method.
+    description: A directive ICE specifying an experimental or computational method.
     slots:
       - label
       - method
       - parameter
-      - wasGeneratedBy
-      - wasDerivedFrom
-      - wasAttributedTo
+      - isOutputOf
     slot_usage:
-      wasGeneratedBy:
+      isOutputOf:
         range: DesignOfExperiment
-      wasDerivedFrom:
-        any_of:
-          - range: Hypothesis
-          - range: Evidence
+        required: true
 
-
-
-  Premise:
-    is_a: Entity
-    class_uri: scimantic:Premise
-    description: An evaluated proposition or insight derived from Evidence.
+  Parameter:
+    is_a: DesignativeICE
+    class_uri: scimantic:Parameter
+    description: A configured parameter value within an ExperimentalMethod.
     slots:
       - label
-      - wasGeneratedBy
-      - wasDerivedFrom
-    slot_usage:
-      wasGeneratedBy:
-        range: EvidenceAssessment
-      wasDerivedFrom:
-        range: Evidence
 
   Dataset:
-    is_a: Entity
+    is_a: InformationContentEntity
     mixins:
       - DCATDataset
       - UncertaintySubject
     class_uri: scimantic:Dataset
-    description: Raw data, observations, or measurements produced by experimentation.
+    description: Raw data, observations, or measurements produced by an Experimentation.
     slots:
       - label
-      - wasGeneratedBy
-      - wasDerivedFrom
+      - isOutputOf
       - hasUncertainty
-      - wasAttributedTo
-
     slot_usage:
-      wasGeneratedBy:
+      isOutputOf:
         range: Experimentation
-      wasDerivedFrom:
-        range: ExperimentalMethod
+        required: true
 
   Result:
-    is_a: Entity
+    is_a: DescriptiveICE
     mixins:
       - URREFEvidence
       - Nanopublication
       - UncertaintySubject
     class_uri: scimantic:Result
-    description: The outcome of an analysis activity.
+    description: A descriptive ICE summarizing the outcome of an Analysis.
     slots:
       - label
-      - wasGeneratedBy
-      - wasDerivedFrom
-      - wasAttributedTo
+      - isOutputOf
       - refines
       - supports
       - contradicts
@@ -239,10 +263,9 @@ classes:
       - value
       - unit
     slot_usage:
-      wasGeneratedBy:
+      isOutputOf:
         range: Analysis
-      wasDerivedFrom:
-        range: Dataset
+        required: true
       refines:
         range: Hypothesis
       supports:
@@ -251,43 +274,176 @@ classes:
         range: Hypothesis
 
   Conclusion:
-    is_a: Entity
+    is_a: DescriptiveICE
     mixins:
       - Nanopublication
     class_uri: scimantic:Conclusion
-    description: The final claim or decision derived from the ResultAssessment.
+    description: The final claim derived from a ResultAssessment.
     slots:
       - label
       - content
-      - wasGeneratedBy
-      - wasDerivedFrom
-      - wasAttributedTo
+      - isOutputOf
     slot_usage:
-      wasGeneratedBy:
+      isOutputOf:
         range: ResultAssessment
-      wasDerivedFrom:
+        required: true
+
+  # ===========================================================
+  # Scimantic Activities (subclasses of CCO Acts)
+  # ===========================================================
+  QuestionFormation:
+    is_a: ActOfPlanning
+    class_uri: scimantic:QuestionFormation
+    description: The act of forming or refining a research Question. Can be informed by prior assessments (iterating on findings) or by literature search.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      precededBy:
+        any_of:
+          - range: ResultAssessment
+          - range: LiteratureSearch
+        required: false
+      hasInput:
+        any_of:
+          - range: Question
+          - range: Annotation
+          - range: Evidence
+        multivalued: true
+        required: false
+        description: Prior inputs that informed this question (a refined-from question, supporting annotations, or evidence).
+
+  LiteratureSearch:
+    is_a: ActOfObservation
+    class_uri: scimantic:LiteratureSearch
+    description: The act of searching literature and producing Annotations (highlights, notes) on source text. Treated as an Act of Observation since it consists of structured observation of source material.
+    slots:
+      - hasAgent
+      - precededBy
+    slot_usage:
+      precededBy:
+        range: QuestionFormation
+
+  EvidenceExtraction:
+    is_a: ActOfInformationProcessing
+    class_uri: scimantic:EvidenceExtraction
+    description: The act of articulating Evidence claims from one or more Annotations. Separates reading/highlighting from formulating evidence statements.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
+        range: Annotation
+        multivalued: true
+        description: The annotations from which evidence is extracted.
+      precededBy:
+        range: LiteratureSearch
+
+  EvidenceAssessment:
+    is_a: ActOfEstimation
+    class_uri: scimantic:EvidenceAssessment
+    description: The act of evaluating credibility or relevance of Evidence, producing a Premise.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
+        range: Evidence
+      precededBy:
+        range: EvidenceExtraction
+
+  HypothesisFormation:
+    is_a: ActOfInformationProcessing
+    class_uri: scimantic:HypothesisFormation
+    description: The act of synthesizing one or more Premises into a Hypothesis.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
+        range: Premise
+        multivalued: true
+      precededBy:
+        range: EvidenceAssessment
+
+  DesignOfExperiment:
+    is_a: ActOfPlanning
+    class_uri: scimantic:DesignOfExperiment
+    description: The act of creating an ExperimentalMethod from a Hypothesis (and possibly supporting Evidence).
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
+        any_of:
+          - range: Hypothesis
+          - range: Evidence
+      precededBy:
+        any_of:
+          - range: HypothesisFormation
+          - range: LiteratureSearch
+
+  Experimentation:
+    is_a: ActOfObservation
+    class_uri: scimantic:Experimentation
+    description: The act of executing an ExperimentalMethod to produce a Dataset.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
+        range: ExperimentalMethod
+      precededBy:
+        range: DesignOfExperiment
+
+  Analysis:
+    is_a: ActOfInformationProcessing
+    class_uri: scimantic:Analysis
+    description: The act of processing a Dataset to produce a Result.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
+        range: Dataset
+      precededBy:
+        range: Experimentation
+
+  ResultAssessment:
+    is_a: ActOfEstimation
+    class_uri: scimantic:ResultAssessment
+    description: The act of comparing a Result to the originating Hypothesis to produce a Conclusion.
+    slots:
+      - hasAgent
+      - precededBy
+      - hasInput
+    slot_usage:
+      hasInput:
         range: Result
+      precededBy:
+        range: Analysis
 
-  Parameter:
-    is_a: Entity
-    class_uri: scimantic:Parameter
-    description: A configured parameter within an Experimental Method.
-
-  # ---------------------------------------------------------
-  # Web Annotation Entities (W3C Open Annotation)
-  # ---------------------------------------------------------
+  # ===========================================================
+  # W3C Web Annotation Entities
+  # ===========================================================
   Annotation:
-    is_a: Entity
+    is_a: DesignativeICE
     class_uri: oa:Annotation
-    description: A text annotation or highlight that grounds Questions or Evidence in specific source text. Follows W3C Web Annotation Data Model.
+    description: A text annotation or highlight that designates a specific span of source text. Follows W3C Web Annotation Data Model.
     slots:
       - label
       - hasBody
       - hasTarget
       - hasSelector
-      - wasAttributedTo
-      - wasGeneratedBy
-      - generatedAtTime
+      - isOutputOf
+      - createdAt
     slot_usage:
       hasTarget:
         description: The source document being annotated (DOI, URL, or local file reference).
@@ -295,14 +451,15 @@ classes:
       hasSelector:
         range: TextSelector
         description: The selector specifying which part of the target is annotated.
-      wasGeneratedBy:
+      isOutputOf:
         range: LiteratureSearch
-        description: The literature search activity that produced this annotation.
+        required: true
+        description: The LiteratureSearch that produced this annotation.
 
   TextSelector:
-    is_a: Entity
+    is_a: DesignativeICE
     class_uri: oa:TextQuoteSelector
-    description: A selector that identifies text by exact quote with surrounding context. Follows W3C Web Annotation TextQuoteSelector.
+    description: A selector identifying text by exact quote with surrounding context. Follows W3C Web Annotation TextQuoteSelector.
     slots:
       - exact
       - prefix
@@ -311,104 +468,13 @@ classes:
       - endOffset
       - pageNumber
 
-  EvidenceAssessment:
-    is_a: Activity
-    class_uri: scimantic:EvidenceAssessment
-    description: The activity of evaluating credibility or relevance of Evidence.
-    slots:
-      - used
-      - wasInformedBy
-      - wasAssociatedWith
-    slot_usage:
-      used:
-        range: Evidence
-      wasInformedBy:
-        range: EvidenceExtraction
-
-  HypothesisFormation:
-    is_a: Activity
-    class_uri: scimantic:HypothesisFormation
-    description: The activity of synthesizing Evidence into a Hypothesis.
-    slots:
-      - used
-      - wasInformedBy
-      - wasAssociatedWith
-    slot_usage:
-      used:
-        range: Premise
-      wasInformedBy:
-        range: EvidenceAssessment
-
-
-
-
-
-  DesignOfExperiment:
-    is_a: Activity
-    class_uri: scimantic:DesignOfExperiment
-    description: The activity of creating an ExperimentalMethod from a Hypothesis.
-    slots:
-      - used
-      - wasInformedBy
-      - wasAssociatedWith
-    slot_usage:
-      used:
-        any_of:
-          - range: Hypothesis
-          - range: Evidence
-      wasInformedBy:
-        any_of:
-          - range: HypothesisFormation
-          - range: LiteratureSearch
-
-  Experimentation:
-    is_a: Activity
-    class_uri: scimantic:Experimentation
-    description: The activity of running an ExperimentalMethod to produce a Dataset.
-    slots:
-      - used
-      - wasInformedBy
-      - wasAssociatedWith
-    slot_usage:
-      used:
-        range: ExperimentalMethod
-      wasInformedBy:
-        range: DesignOfExperiment
-
-  Analysis:
-    is_a: Activity
-    class_uri: scimantic:Analysis
-    description: The activity of processing a Dataset to produce a Result.
-    slots:
-      - used
-      - wasInformedBy
-      - wasAssociatedWith
-    slot_usage:
-      used:
-        range: Dataset
-      wasInformedBy:
-        range: Experimentation
-
-  ResultAssessment:
-    is_a: Activity
-    class_uri: scimantic:ResultAssessment
-    description: The activity of comparing a Result to the original Hypothesis.
-    slots:
-      - used
-      - wasInformedBy
-      - wasAssociatedWith
-    slot_usage:
-      used:
-        range: Result
-      wasInformedBy:
-        range: Analysis
-  # ---------------------------------------------------------
-  # Uncertainty Entities (URREF Integration)
-  # ---------------------------------------------------------
+  # ===========================================================
+  # Uncertainty Entities (URREF + BFO Quality)
+  # ===========================================================
   UncertaintyModel:
-    is_a: Entity
+    is_a: BFOQuality
     class_uri: urref:UncertaintyModel
-    description: A reified uncertainty model.
+    description: A reified uncertainty model. As a BFO quality (SDC), it inheres in some independent continuant (the UncertaintySubject).
     slots:
       - natureOfUncertainty
       - derivationOfUncertainty
@@ -421,11 +487,6 @@ classes:
     is_a: UncertaintyModel
     class_uri: urref:Ambiguity
     description: Ambiguity is inherently Epistemic uncertainty.
-    slot_usage:
-      natureOfUncertainty:
-        range: UncertaintyNature
-        # Constraint to single value handled via OWL subClassOf restriction if needed,
-        # or simplified here as documentation since LinkML enum constraints are complex.
 
   Vagueness:
     is_a: UncertaintyModel
@@ -442,12 +503,13 @@ classes:
     class_uri: urref:Aleatory
     description: Aleatory uncertainty entities must have nature Aleatory.
 
-  # ---------------------------------------------------------
-  # External/Mixin Classes
-  # ---------------------------------------------------------
+  # ===========================================================
+  # External / Mixin Classes
+  # ===========================================================
   URREFEvidence:
     class_uri: urref:Evidence
-    description: Root evidence class from URREF ontology.
+    description: URREF Evidence (mixin reference).
+    mixin: true
 
   UncertaintyDerivation:
     class_uri: urref:UncertaintyDerivation
@@ -455,89 +517,126 @@ classes:
 
   Nanopublication:
     class_uri: np:Nanopublication
-    description: A nanopublication object.
+    description: A nanopublication object (mixin).
+    mixin: true
 
   Identifiable:
     class_uri: scimantic:Identifiable
     mixin: true
-    description: A mixin for objects that have a unique identifier.
+    description: A mixin for objects that have a unique identifier slot.
     slots:
       - id
 
   UncertaintySubject:
     class_uri: scimantic:UncertaintySubject
-    description: A mixin for objects that can have a reified uncertainty model.
+    mixin: true
+    description: A mixin for continuants that can bear a reified uncertainty model (a BFO quality).
 
   DCATDataset:
     class_uri: dcat:Dataset
-    description: A collection of data, published or curated by a single agent.
-
+    mixin: true
+    description: A collection of data, published or curated by a single agent (DCAT mixin).
 
 
 slots:
-  # ---------------------------------------------------------
-
-  # Domain Slots (Properties)
-  # ---------------------------------------------------------
-  label:
-    slot_uri: rdfs:label
-    description: The human-readable label or text.
-    required: true
-
-  wasGeneratedBy:
-    slot_uri: prov:wasGeneratedBy
-    description: The activity that generated this entity.
-
-  wasAssociatedWith:
-    slot_uri: prov:wasAssociatedWith
-    description: The agent associated with an activity.
-    range: Agent
-    domain: Activity
-
-  wasAttributedTo:
-    slot_uri: prov:wasAttributedTo
-    description: The agent who attributed this entity (Agent).
-    range: Agent
-    domain: Entity
-
-
+  # ===========================================================
+  # Identifier and label
+  # ===========================================================
   id:
     identifier: true
     description: Unique identifier (URI) for this node.
     range: string
     domain: Identifiable
 
-  motivates:
-    slot_uri: scimantic:motivates
-    description: A Question that triggers or motivates an Activity.
+  label:
+    slot_uri: rdfs:label
+    description: The human-readable label or text.
+    required: true
+
+  # ===========================================================
+  # BFO/CCO core process-participant relations
+  # Replace prior PROV-O wasGeneratedBy / used / wasAssociatedWith / wasInformedBy.
+  # wasDerivedFrom and wasAttributedTo are intentionally not replaced by direct
+  # entity-to-entity slots; provenance is traversed via isOutputOf -> hasInput
+  # and isOutputOf -> hasAgent respectively.
+  # ===========================================================
+  isOutputOf:
+    slot_uri: cco:ont00001816
+    description: CCO 'is output of'. Inverse of 'has output'. Links a continuant to the process that produced it.
+    range: BFOProcess
+    domain: BFOContinuant
+
+  hasInput:
+    slot_uri: cco:ont00001921
+    description: CCO 'has input'. Links a process to an entity it takes as input.
+    range: BFOEntity
+    domain: BFOProcess
+
+  hasAgent:
+    slot_uri: cco:ont00001833
+    description: CCO 'has agent'. Links a process to its agent participant.
+    range: Agent
+    domain: BFOProcess
+
+  precededBy:
+    slot_uri: obo:BFO_0000062
+    description: BFO 'preceded by'. An occurrent temporally preceded by another occurrent.
+    range: BFOOccurrent
+    domain: BFOOccurrent
+
+  prescribes:
+    slot_uri: cco:ont00001942
+    description: CCO 'prescribes'. A directive ICE prescribes a behavior, plan, or process.
+    range: BFOEntity
+    domain: DirectiveICE
     multivalued: true
 
-  used:
-    slot_uri: prov:used
-    description: Entity used by an Activity.
-
-  wasInformedBy:
-    slot_uri: prov:wasInformedBy
-    description: Activity that informed this Activity.
-
-  wasDerivedFrom:
-    slot_uri: prov:wasDerivedFrom
-    description: Entity derived from another Entity.
-
+  # ===========================================================
+  # Scimantic-local relations
+  # No clean BFO/CCO equivalents; defined locally.
+  # ===========================================================
   refines:
     slot_uri: scimantic:refines
     description: A Result that suggests a specific modification to a Hypothesis.
 
-
-
   supports:
     slot_uri: scimantic:supports
-    description: An Entity (Evidence/Result) that provides positive evidence for a Hypothesis.
+    description: An entity (Evidence/Result) that provides positive evidence for a Hypothesis.
 
   contradicts:
     slot_uri: scimantic:contradicts
-    description: An Entity (Evidence/Result) that provides negative evidence against a Hypothesis.
+    description: An entity (Evidence/Result) that provides negative evidence against a Hypothesis.
 
+  hasUncertainty:
+    slot_uri: scimantic:hasUncertainty
+    description: Links an UncertaintySubject (continuant) to the UncertaintyModel (BFO quality) it bears. Effectively a restriction of BFO 'bearer of' (obo:BFO_0000196) to UncertaintyModel range.
+    range: UncertaintyModel
+    domain: UncertaintySubject
+
+  # ===========================================================
+  # Activity lifecycle (optional metadata)
+  # ===========================================================
+  status:
+    slot_uri: scimantic:status
+    description: >-
+      Optional lifecycle status of a PlannedAct. Captures planning/execution
+      phase as data; does NOT change the act's BFO/CCO type. A single Act
+      individual spans its planning, execution, and completion as one
+      occurrent; this enum records which phase its temporal region is in.
+    range: ActStatus
+    domain: Act
+    required: false
+
+  createdAt:
+    slot_uri: dcterms:created
+    description: When this entity was created (ISO 8601 datetime).
+    range: datetime
+    domain: BFOEntity
+    required: false
+
+  # ===========================================================
+  # Domain scalars
+  # ===========================================================
   method:
     slot_uri: scimantic:method
     description: Name or description of the method.
@@ -551,30 +650,10 @@ slots:
     multivalued: true
     domain: ExperimentalMethod
 
-
-
-  hasUncertainty:
-    slot_uri: scimantic:hasUncertainty
-    description: Links an entity to its reified uncertainty model.
-    range: UncertaintyModel
-    domain: UncertaintySubject
-
-  natureOfUncertainty:
-    slot_uri: urref:natureOfUncertainty
-    description: The nature of the uncertainty (Aleatory or Epistemic).
-    range: UncertaintyNature
-    domain: UncertaintyModel
-
-  derivationOfUncertainty:
-    slot_uri: urref:derivationOfUncertainty
-    description: How the uncertainty was derived.
-    range: UncertaintyDerivation
-    domain: UncertaintyModel
-
   value:
     slot_uri: scimantic:value
     description: The numeric or categorical result.
-    range: string # Simplification for now
+    range: string
     domain: Result
 
   unit:
@@ -597,9 +676,8 @@ slots:
 
   content:
     slot_uri: scimantic:content
-    description: The actual text content of the evidence.
+    description: The text content of an ICE (used by Evidence and Conclusion).
     range: string
-    domain: Evidence
 
   citation:
     slot_uri: dcterms:bibliographicCitation
@@ -613,15 +691,24 @@ slots:
     range: string
     domain: Evidence
 
-  generatedAtTime:
-    slot_uri: prov:generatedAtTime
-    description: Time of generation.
-    range: datetime
-    domain: Entity
+  # ===========================================================
+  # Uncertainty slots (URREF)
+  # ===========================================================
+  natureOfUncertainty:
+    slot_uri: urref:natureOfUncertainty
+    description: The nature of the uncertainty (Aleatory or Epistemic).
+    range: UncertaintyNature
+    domain: UncertaintyModel
 
-  # ---------------------------------------------------------
-  # Web Annotation Slots
-  # ---------------------------------------------------------
+  derivationOfUncertainty:
+    slot_uri: urref:derivationOfUncertainty
+    description: How the uncertainty was derived.
+    range: UncertaintyDerivation
+    domain: UncertaintyModel
+
+  # ===========================================================
+  # W3C Web Annotation slots
+  # ===========================================================
   hasBody:
     slot_uri: oa:hasBody
     description: The content or comment of the annotation (optional for highlights).
@@ -667,6 +754,7 @@ slots:
     description: Page number in PDF documents where the selection appears.
     range: integer
 
+
 enums:
   UncertaintyNature:
     permissible_values:
@@ -674,3 +762,18 @@ enums:
         description: Uncertainty due to lack of knowledge.
       Aleatory:
         description: Uncertainty due to inherent randomness.
+
+  ActStatus:
+    description: >-
+      Lifecycle status of a PlannedAct. Optional metadata; does NOT change
+      the act's BFO/CCO classification. A single Act individual is the same
+      instance regardless of which phase its temporal region is in.
+    permissible_values:
+      planned:
+        description: The act has been designed but execution has not begun.
+      in_progress:
+        description: The act has begun but has not ended.
+      completed:
+        description: The act has ended successfully.
+      abandoned:
+        description: The act was started but did not reach completion.
