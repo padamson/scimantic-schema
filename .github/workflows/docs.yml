@@ -105,7 +105,8 @@ jobs:
         run: |
           cargo install --git https://github.com/padamson/mdbook-listings \
             --rev ${{ steps.mdbook-listings.outputs.sha }} \
-            --locked --force
+            --locked --force \
+            mdbook-listings
 
       - name: Cache mdbook-admonish binary
         id: cache-mdbook-admonish
