@@ -61,32 +61,40 @@ through the act that did the deriving (e.g., a `Result` is the output of an
 
 ## Authoring
 
-For local iteration on the schema with rendered HTML feedback.
-
-### Install panschema
+The combined book + versioned schema docs run locally via:
 
 ```bash
-cargo install wasm-pack    # build prerequisite (panschema's build.rs runs wasm-pack)
-cargo install --git https://github.com/padamson/panschema panschema
+./scripts/dev.sh
+# → http://localhost:8000/
 ```
 
-### Build the HTML docs
+This builds the book at `/` and panschema-published versioned schema
+docs at `/schema/{v0.1.0,v0.2.0,main,current}/`, serves the combined
+site over HTTP, and rebuilds on any save in `schema/`, `book/`, or
+(if you have the producer repos cloned locally — see "Dogfooding the
+tooling" below) `panschema/`, `mdbook-listings/`, `mdbook-admonish/`
+sources.
+
+### Install once
 
 ```bash
-panschema generate -i schema/scimantic.yaml -o site/ -f html
+# Schema + book tooling
+cargo install wasm-pack --locked   # build prerequisite for panschema
+cargo install --git https://github.com/padamson/panschema panschema --locked
+cargo install --git https://github.com/padamson/mdbook-listings --locked
+cargo install --git https://github.com/padamson/mdbook-admonish \
+  --branch feat/mdbook-0.5-compat --locked
+cargo install mdbook --locked
+cargo install watchexec-cli --locked   # required by scripts/dev.sh
+
+# Optional: in-browser auto-reload (otherwise refresh manually after each rebuild)
+npm install -g live-server
 ```
 
-Open `site/index.html` in a browser.
+### Other formats
 
-### Hot-reload server
-
-```bash
-panschema serve -i schema/scimantic.yaml
-```
-
-Open <http://localhost:3000>. Edits to `schema/scimantic.yaml` trigger a regenerate.
-
-Other formats (`ttl`, `jsonld`, `rdfxml`, `ntriples`) are available via `--format`.
+panschema can also emit `ttl`, `jsonld`, `rdfxml`, `ntriples` via
+`--format <fmt>`. See `panschema generate --help`.
 
 ## Related work
 
