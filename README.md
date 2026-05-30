@@ -15,49 +15,43 @@ generators, and the layout to co-evolve in lockstep until 1.0 (and beyond).
 
 ```
 schema/
-  scimantic.yaml     # source of truth (LinkML)
+  scimantic.yaml          # source of truth (LinkML)
+book/                     # mdbook documenting the v0.3.0 rebuild
+scripts/
+  dev.sh                  # local hot-reload preview (book + versioned schema docs)
+  rebuild.sh              # one-shot rebuild (mirrors CI)
+panschema-publish.toml    # panschema's release + publish manifest
+.github/workflows/
+  docs.yml                # builds book + versioned schema docs; deploys to Pages
 ```
-
-`generated/` and per-format subdirectories will land as panschema gains the
-writers to populate them (see the [feature roadmap discussion](#related-work)).
 
 ## Versioning
 
-The schema's `version:` field is the source of truth. Git tags will match
-the schema version (e.g. `v0.2.0` ↔ `version: 0.2.0`).
+The schema's `version:` field is the source of truth. Release tags
+match the version (e.g. `v0.2.0` ↔ `version: 0.2.0`). Between
+releases, the version field carries a `-dev` suffix (e.g.,
+`0.3.0-dev` while v0.3.0 is being rebuilt).
 
 ## What's in here
 
-The schema models the scientific method as a chain of information content
-entities (`Question`, `Hypothesis`, `Evidence`, `Conclusion`, ...) and
-planned acts (`QuestionFormation`, `LiteratureSearch`, `Experimentation`,
-...), grounded in a recognized upper-level/mid-level ontology backbone:
+The schema models the scientific method as provenance chains —
+questions, hypotheses, evidence, conclusions, and the acts that
+connect them.
 
-- [BFO 2020](https://github.com/BFO-ontology/BFO-2020) (ISO/IEC 21838-2:2020)
-  as the upper-level ontology — every domain class sits under a BFO category
-  (continuant / occurrent, ICE / process, quality, etc.)
-- [Common Core Ontologies](https://github.com/CommonCoreOntology/CommonCoreOntologies)
-  for mid-level alignment — domain entities subclass CCO Information Content
-  Entity (and its `Descriptive` / `Designative` / `Directive` subclasses);
-  activities subclass CCO `Planned Act` and its specializations
-  (`Act of Observation`, `Act of Estimation`, `Act of Information Processing`,
-  `Act of Planning`)
-- [DCAT](https://www.w3.org/TR/vocab-dcat-3/) for dataset metadata
-- [W3C Web Annotation](https://www.w3.org/TR/annotation-model/) for text
-  selectors over source documents
-- [URREF](https://github.com/adelphi23/urref) for uncertainty representation
-  (reified as BFO qualities)
+The canonical "what's in the schema today" reference is the rendered
+class graph at [`/schema/current/`](https://padamson.github.io/scimantic-schema/schema/current/).
+For the design rationale and chapter-by-chapter rebuild journey, see
+the [book](https://padamson.github.io/scimantic-schema/) at the site
+root.
 
-Provenance is expressed via the CCO process-participant relations
-(`hasInput`, `hasOutput` / `isOutputOf`, `hasAgent`) and BFO `preceded by`,
-rather than PROV-O. Entity-to-entity derivation is always traversed
-through the act that did the deriving (e.g., a `Result` is the output of an
-`Analysis` whose input is a `Dataset`), not via shortcut relations.
-
-> **v0.2.0 — re-grounding in BFO/CCO.** v0.1.0 grounded the schema in PROV-O;
-> v0.2.0 replaces that with BFO + CCO. PROV mappings are not included in this
-> release, but can be added back in a future release as `close_mappings` if 
-> downstream users identify a need to support PROV tooling.
+> **v0.3.0 is a ground-up rebuild in progress.** v0.1.0 grounded the
+> schema in PROV-O; v0.2.0 attempted to retrofit BFO/CCO grounding
+> onto the PROV-derived structure; v0.3.0 starts fresh, applying Noy
+> & McGuinness's *Ontology Development 101* (adapted to LinkML) from
+> Step 1. The book documents the rebuild; the schema on `main` is
+> currently a minimal stub being populated chapter by chapter. The
+> last released class graph is at
+> [`/schema/v0.2.0/`](https://padamson.github.io/scimantic-schema/schema/v0.2.0/).
 
 ## Authoring
 
@@ -100,7 +94,7 @@ panschema can also emit `ttl`, `jsonld`, `rdfxml`, `ntriples` via
 
 This schema is consumed by:
 
-- [scimantic](https://github.com/padamson/scimantic) — VS Code extension and runtime
+- [scimantic-extension](https://github.com/padamson/scimantic-extension) — VS Code extension and runtime
 - [t2t](https://github.com/padamson/t2t) — book-and-app project on building a "trunk-to-theory" knowledge system
 
 Both will consume tagged versions of this repo via [panschema](https://github.com/padamson/panschema) including projecting the schema into whatever target format

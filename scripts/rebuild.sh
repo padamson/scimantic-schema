@@ -61,7 +61,11 @@ echo "==> [$(ts)] Rebuild the combined site:"
 )
 
 # 2. Versioned schema docs — site/schema/{v0.1.0,v0.2.0,main,current}/
-panschema publish
+# --edge-from-worktree: render /schema/main/ from the working tree
+# rather than `git show main:schema/scimantic.yaml`, so local edits
+# appear immediately. CI (.github/workflows/docs.yml) deliberately
+# omits this flag so deployed docs always reflect committed state.
+panschema publish --edge-from-worktree
 
 # 3. Combine — book at site/ root, schema docs already at site/schema/
 mkdir -p site

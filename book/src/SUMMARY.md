@@ -1,7 +1,7 @@
 # Summary
 
 - [Introduction](ch01-introduction.md)
-- [Domain and Scope]()
+- [Domain and Scope](ch02-domain-and-scope.md)
 - [Reusing Existing Ontologies]()
 - [Important Terms]()
 - [Classes and Hierarchy]()

@@ -9,7 +9,10 @@ main = "schema/scimantic.yaml"
 [publishing]
 versions = ["v0.1.0", "v0.2.0"]
 edge = "main"
+# Release reminder: when releasing a new version, flip `current` to the
+# new tag (e.g., "v0.2.0" -> "v0.3.0" in the v0.3.0 release commit) so
+# `/schema/current/` aliases to the new release. Also: append the new
+# tag to `versions` above.
 current = "v0.2.0"
-url_pattern = "/schema/{version}/"
 output_dir = "site/schema"
 format = "html"
