@@ -2,7 +2,7 @@
 
 - [Introduction](ch01-introduction.md)
 - [Domain and Scope](ch02-domain-and-scope.md)
-- [Reusing Existing Ontologies]()
+- [Reusing Existing Ontologies](ch03-reusing-existing-ontologies.md)
 - [Important Terms]()
 - [Classes and Hierarchy]()
 - [Slots]()

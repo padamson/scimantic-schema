@@ -16,3 +16,8 @@ edge = "main"
 current = "v0.2.0"
 output_dir = "site/schema"
 format = "html"
+# Header brand/home link target. Our publish dir is site/schema/<version>/,
+# so "../../" escapes back to the book root (works in both localhost dev
+# and the github.io deploy). The panschema default "../current/" assumes a
+# standalone schema-only deploy and is wrong for this book-nested layout.
+site_root_url = "../../"

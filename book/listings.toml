@@ -1,1 +1,7 @@
 version = 1
+
+[[listing]]
+tag = "scimantic-yaml-v1"
+source = "../schema/scimantic.yaml"
+frozen = "src/listings/scimantic-yaml-v1.yaml"
+sha256 = "0952c483c3e10c1801ced1ac9fece2fab04327786a087276fa4ed5a05c4fe0f8"

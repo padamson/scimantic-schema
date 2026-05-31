@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "mdbook-listings": {
+      "source": {
+        "source": "github",
+        "repo": "padamson/mdbook-listings"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "mdbook-listings@mdbook-listings": true
+  }
+}
