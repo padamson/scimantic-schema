@@ -45,9 +45,17 @@ is a top-level ontology standardized as
 [ISO/IEC 21838-2:2020](https://www.iso.org/standard/74572.html) and
 the shared upper layer of the OBO Foundry. Its job is to fix a small
 set of rigorous categories for *what exists*. Of those, the one
-scimantic leans on hardest is the **continuant / occurrent** split:
-things that persist through time while keeping their identity, versus
-things that unfold *in* time. scimantic's domain is a *process*:
+scimantic leans on hardest is the **continuant / occurrent** split.
+
+```admonish info title="Jargon: continuant and occurrent"
+The foundational distinction every upper ontology draws (BFO's labels
+here; DOLCE calls them *endurant* and *perdurant*). A **continuant**
+persists through time while keeping its identity: a document, a person, a
+dataset. An **occurrent** unfolds *in* time, its parts never all present
+at once: a search, an experiment, an assessment.
+```
+
+scimantic's domain is a *process*:
 questions get formed, evidence gets gathered, conclusions get drawn.
 So the continuant/occurrent distinction is the backbone the schema
 needs. We reuse BFO via the `obo:` prefix; BFO

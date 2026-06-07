@@ -118,6 +118,15 @@ wants to say *who* asserted that support, *when*, or *how strongly*,
 the support edge has to become a node of its own (a reified
 **evidential relation**), not a bare property.
 
+```admonish info title="Jargon: reification"
+**Reification** promotes a relationship into a first-class entity (a
+node) so it can carry properties of its own. `supports` is an *edge*
+between evidence and a hypothesis; reifying it makes the support itself a
+node, one that can record who asserted it, when, and how strongly. The
+cost is an extra node on every such link, so scimantic reifies only where
+a question demands those extra facts.
+```
+
 *"For two competing hypotheses, what evidence has been gathered on
 each side?"* (CQ 7) adds the first genuinely new *idea* to the
 vocabulary: **contrast**. Up to here every relation has been lineage
@@ -147,6 +156,17 @@ an **executes** relation tying an `Experimentation` to the
 `ExperimentalMethod` it ran — an edge the vocabulary lacks. (In
 BFO/CCO terms a method is a *plan specification* that an act *realizes*,
 so this may reuse an upstream relation rather than mint a fresh one.)
+
+```admonish info title="Jargon: realizable entities and realization"
+BFO separates a continuant that describes a *potential* from the process
+that makes it actual. A **plan specification** such as a method is one
+such continuant; an act **realizes** it by carrying it out. The same
+machinery covers a BFO **role**: a potential something has by virtue of
+its context, realized when it acts in that role. scimantic leans on this
+twice: an experiment realizes a method, and (in Chapter 5) a hypothesis
+formation realizes a claim's *premise* role.
+```
+
 *"What act produced a given dataset, and what method did it apply?"*
 (CQ 10) widens both: it says "what *act*," not "what Experimentation,"
 so it quantifies over acts generically and needs **Act** to be a real
