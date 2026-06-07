@@ -7,9 +7,14 @@
 #
 # Mirrors what `.github/workflows/docs.yml` does in CI (minus the deploy
 # step), but with producer-source changes flowing in via the local debug
-# binaries the user's shell aliases point at (see README "Tight-loop
-# tooling iteration"). Called by `scripts/dev.sh` for the initial build
+# binaries the user's shell aliases point at (see README "Dogfooding the
+# tooling"). Called by `scripts/dev.sh` for the initial build
 # and re-invoked on every file change via `cargo-watch`.
+#
+# Set SKIP_PRODUCER_BUILD=1 to skip the producer `cargo build` step and
+# regenerate the site from the producer binaries already on PATH — useful
+# while iterating on a producer (e.g. panschema) in its own repo, so its
+# slow build doesn't run on every scimantic change.
 
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -32,23 +37,27 @@ for producer in panschema mdbook-listings mdbook-admonish; do
 done
 
 echo ""
-echo "==> [$(ts)] Refresh producer debug binaries (no-op if no change):"
+if [ -n "${SKIP_PRODUCER_BUILD:-}" ]; then
+  echo "==> [$(ts)] Skip producer rebuild (SKIP_PRODUCER_BUILD set) — using binaries on PATH."
+else
+  echo "==> [$(ts)] Refresh producer debug binaries (no-op if no change):"
 
-# Each producer: if the repo exists locally, `cargo build` it. Incremental
-# build is a few hundred ms when nothing changed; updates target/debug/
-# (the path the user's shell aliases resolve to) when source changed.
-for producer in panschema mdbook-listings mdbook-admonish; do
-  repo="$HOME/src/github-padamson/$producer"
-  if [ -d "$repo" ]; then
-    echo "  - $producer"
-    (cd "$repo" && cargo build 2>&1 | tail -3) || {
-      echo "    ❌ $producer build failed — bailing this rebuild cycle."
-      exit 1
-    }
-  else
-    echo "  - $producer: ⚠ not cloned at $repo — skipping"
-  fi
-done
+  # Each producer: if the repo exists locally, `cargo build` it. Incremental
+  # build is a few hundred ms when nothing changed; updates target/debug/
+  # (the path the user's shell aliases resolve to) when source changed.
+  for producer in panschema mdbook-listings mdbook-admonish; do
+    repo="$HOME/src/github-padamson/$producer"
+    if [ -d "$repo" ]; then
+      echo "  - $producer"
+      (cd "$repo" && cargo build 2>&1 | tail -3) || {
+        echo "    ❌ $producer build failed — bailing this rebuild cycle."
+        exit 1
+      }
+    else
+      echo "  - $producer: ⚠ not cloned at $repo — skipping"
+    fi
+  done
+fi
 
 echo ""
 echo "==> [$(ts)] Rebuild the combined site:"

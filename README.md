@@ -90,6 +90,58 @@ npm install -g live-server
 panschema can also emit `ttl`, `jsonld`, `rdfxml`, `ntriples` via
 `--format <fmt>`. See `panschema generate --help`.
 
+## Dogfooding the tooling
+
+This repo is [panschema](https://github.com/padamson/panschema)'s flagship
+dogfood case, and also exercises `mdbook-listings` and the `mdbook-admonish`
+fork. When you iterate on a producer's source, `scripts/dev.sh` can rebuild
+it and regenerate the site from the fresh binary, so producer changes show
+up live.
+
+### The alias pattern
+
+`scripts/rebuild.sh` invokes producers by name (`panschema`,
+`mdbook-listings`, `mdbook-admonish`). To make both the scripts and your
+interactive shell use your **local debug builds** instead of the
+`cargo install`-ed releases, clone the producers under
+`~/src/github-padamson/` and alias each to its `target/debug` binary:
+
+```zsh
+# ~/.zshrc
+alias panschema="$HOME/src/github-padamson/panschema/target/debug/panschema"
+alias mdbook-listings="$HOME/src/github-padamson/mdbook-listings/target/debug/mdbook-listings"
+alias mdbook-admonish="$HOME/src/github-padamson/mdbook-admonish/target/debug/mdbook-admonish"
+```
+
+Aliases load only in interactive shells; `rebuild.sh` re-derives the same
+paths via `$PATH` prepends so non-interactive runs match.
+
+### Three modes
+
+- **Authoring only** — not touching the producers, just writing the schema
+  and book against the released binaries. `./scripts/dev.sh`; producers you
+  haven't cloned are skipped.
+- **Light producer dogfooding** — an occasional producer tweak where you
+  want edit-producer → site auto-rebuilds. `./scripts/dev.sh` (the default:
+  it watches and `cargo build`s the producers). Fine when their builds are
+  fast or infrequent.
+- **Heavy producer development** — you're building out a producer (e.g.
+  panschema features) and its per-change `cargo build` (linking panschema's
+  ~35 MB debug binary) is too slow on every edit:
+
+  ```bash
+  SKIP_PRODUCER_BUILD=1 ./scripts/dev.sh
+  ```
+
+  dev.sh stops watching and building producers; you drive the producer's
+  build in its own repo, then `touch schema/scimantic.yaml` to regenerate
+  the site with the new binary.
+
+> **panschema wasm note:** editing `panschema-viz/src` (the graph viz) does
+> not rebuild the embedded wasm via `cargo build` — `build.rs` only runs
+> `wasm-pack` when `panschema-viz/pkg/` is missing. Rebuild it with
+> `wasm-pack build` in `panschema-viz`, or `rm -rf panschema-viz/pkg`.
+
 ## Related work
 
 This schema is consumed by:

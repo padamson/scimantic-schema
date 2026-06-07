@@ -19,13 +19,21 @@
 # Usage:
 #   ./scripts/dev.sh                 # PORT=8000 (default)
 #   PORT=8080 ./scripts/dev.sh
+#   SKIP_PRODUCER_BUILD=1 ./scripts/dev.sh
+#       Don't build or watch the producers; use the binaries already on
+#       PATH and only regenerate the site on schema/book changes. Use when
+#       you're iterating on a producer (e.g. panschema) in its own repo and
+#       don't want its slow `cargo build` (linking a ~35 MB debug binary) on
+#       every scimantic change. After rebuilding the producer yourself,
+#       trigger a site refresh by touching a watched file
+#       (e.g. `touch schema/scimantic.yaml`).
 #
 # Stop with Ctrl+C.
 #
 # Requires (in this repo):
 #   - mdbook, mdbook-listings, mdbook-admonish, panschema on PATH —
 #     ideally as aliases pointing at producer target/debug binaries
-#     (see README "Tight-loop tooling iteration").
+#     (see README "Dogfooding the tooling").
 #   - watchexec (general-purpose file watcher; cargo-watch is the wrong
 #     tool here because scimantic-schema is not a Cargo project):
 #       cargo install watchexec-cli
@@ -44,6 +52,11 @@ cd "$(git rev-parse --show-toplevel)"
 PORT="${PORT:-8000}"
 export PORT
 
+# When set, skip building/watching the producers (panschema, mdbook-listings,
+# mdbook-admonish); use the binaries on PATH and only regenerate the site.
+SKIP_PRODUCER_BUILD="${SKIP_PRODUCER_BUILD:-}"
+export SKIP_PRODUCER_BUILD
+
 # --- Tool availability ---
 
 missing=()
@@ -56,7 +69,7 @@ if [ "${#missing[@]}" -gt 0 ]; then
   echo ""
   echo "Setup:"
   echo "  - mdbook / mdbook-listings / mdbook-admonish / panschema:"
-  echo "      see README 'Tight-loop tooling iteration' for the alias pattern"
+  echo "      see README 'Dogfooding the tooling' for the alias pattern"
   echo "  - watchexec: cargo install watchexec-cli"
   exit 1
 fi
@@ -80,6 +93,9 @@ watch_args=(
 # Crucially do NOT watch the whole repo — target/ would create a rebuild loop.
 producer_dirs=()
 for producer in panschema mdbook-listings mdbook-admonish; do
+  # SKIP_PRODUCER_BUILD: don't watch producer source — you're driving the
+  # producer's build in its own repo, so leave it out of this loop.
+  [ -n "${SKIP_PRODUCER_BUILD:-}" ] && break
   repo="$HOME/src/github-padamson/$producer"
   [ -d "$repo" ] || continue
 
@@ -133,6 +149,7 @@ echo "  schema/, book/src/, book/*.toml, panschema-publish.toml"
 for p in "${producer_dirs[@]}"; do
   echo "  $p source (producer dogfood)"
 done
+[ -n "${SKIP_PRODUCER_BUILD:-}" ] && echo "  (producers skipped — SKIP_PRODUCER_BUILD set; using binaries from PATH)"
 echo ""
 echo "Edit any of those to trigger a rebuild. Ctrl+C to stop."
 echo ""
