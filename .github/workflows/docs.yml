@@ -40,14 +40,6 @@ jobs:
           sha=$(gh api repos/padamson/panschema/commits/main --jq .sha)
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-      - name: Resolve latest mdbook-listings main SHA
-        id: mdbook-listings
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          sha=$(gh api repos/padamson/mdbook-listings/commits/main --jq .sha)
-          echo "sha=$sha" >> "$GITHUB_OUTPUT"
-
       - name: Resolve mdbook-admonish fork branch SHA
         id: mdbook-admonish
         env:
@@ -113,15 +105,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cargo/bin/mdbook-listings
-          key: mdbook-listings-${{ runner.os }}-${{ steps.mdbook-listings.outputs.sha }}
+          key: mdbook-listings-${{ runner.os }}-0.1.0
 
-      - name: Install mdbook-listings from main
+      - name: Install mdbook-listings
+        # Pinned to the published crates.io release. Bump the version here
+        # (and the cache key above) when adopting a new mdbook-listings.
         if: steps.cache-mdbook-listings.outputs.cache-hit != 'true'
-        run: |
-          cargo install --git https://github.com/padamson/mdbook-listings \
-            --rev ${{ steps.mdbook-listings.outputs.sha }} \
-            --locked --force \
-            mdbook-listings
+        run: cargo install mdbook-listings --version 0.1.0 --locked
 
       - name: Cache mdbook-admonish binary
         id: cache-mdbook-admonish

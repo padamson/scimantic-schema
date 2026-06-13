@@ -2,8 +2,9 @@
 # scripts/rebuild.sh
 #
 # Rebuild the dogfood-loop site: refresh producer debug binaries
-# (panschema, mdbook-listings, mdbook-admonish) via `cargo build`, then
-# rebuild the combined site (book + versioned schema docs) into `site/`.
+# (panschema, mdbook-admonish) via `cargo build`, then rebuild the
+# combined site (book + versioned schema docs) into `site/`. mdbook-listings
+# is a published crates.io dependency, not a local-checkout producer.
 #
 # Mirrors what `.github/workflows/docs.yml` does in CI (minus the deploy
 # step), but with producer-source changes flowing in via the local debug
@@ -23,13 +24,13 @@ ts() { date '+%H:%M:%S'; }
 
 # Shell aliases (e.g. `alias panschema=.../target/debug/panschema` in
 # ~/.zshrc) only load in *interactive* shells — non-interactive scripts
-# like this one resolve `panschema`, `mdbook-listings`, `mdbook-admonish`
-# via $PATH, which would hit the cargo-installed releases in
-# ~/.cargo/bin/ instead of the dogfood-fresh debug binaries.
+# like this one resolve `panschema`, `mdbook-admonish` via $PATH, which
+# would hit the cargo-installed releases in ~/.cargo/bin/ instead of the
+# dogfood-fresh debug binaries.
 #
 # Prepend each producer's target/debug to PATH so script invocations of
 # the producer use the same binaries the user's interactive shell does.
-for producer in panschema mdbook-listings mdbook-admonish; do
+for producer in panschema mdbook-admonish; do
   debug_dir="$HOME/src/github-padamson/$producer/target/debug"
   if [ -x "$debug_dir/$producer" ]; then
     export PATH="$debug_dir:$PATH"
@@ -45,7 +46,7 @@ else
   # Each producer: if the repo exists locally, `cargo build` it. Incremental
   # build is a few hundred ms when nothing changed; updates target/debug/
   # (the path the user's shell aliases resolve to) when source changed.
-  for producer in panschema mdbook-listings mdbook-admonish; do
+  for producer in panschema mdbook-admonish; do
     repo="$HOME/src/github-padamson/$producer"
     if [ -d "$repo" ]; then
       echo "  - $producer"

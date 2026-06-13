@@ -65,6 +65,16 @@ located at a `TemporalInterval`, not stamped with a single `createdAt`
 instant, which would be false for an experiment that runs for days.
 These are the scaffold the contested decisions hang on.
 
+```admonish info title="How the grounding is written: subclass_of"
+LinkML's `is_a` links classes *within* a schema; it cannot point at an
+external term. So each anchor grounds in its BFO/CCO category with
+**`subclass_of`**, LinkML's `rdfs:subClassOf` to an external CURIE, and
+the domain classes that `is_a` the anchor inherit it. This is the pattern
+Biolink uses to anchor in BFO. (LinkML marks `subclass_of` deprecated in
+favor of `is_a`, but `is_a` cannot reach an external IRI, so it stays the
+tool for cross-ontology grounding.)
+```
+
 ## The claim spine
 
 The core of the method is the chain from a question, through evidence
