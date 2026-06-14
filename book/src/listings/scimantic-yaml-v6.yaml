@@ -240,17 +240,10 @@ classes:
   # CALLOUT: evrel-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an EvidentialRelation is a reified, described claim-to-claim relation under it.
   EvidentialRelation:
     subclass_of: cco:ont00000853
-    slots:
-      - subject
-      - object
-      - polarity
-      - strength
-      - assertedBy
     description: >-
-      A reified claim-to-claim relation between a subject and an
-      object claim: a Descriptive ICE carrying a cito-typed
-      polarity, a strength, and the asserting act, through which
-      the agent and time are reached.
+      A reified claim-to-claim relation: a Descriptive ICE carrying a
+      cito-typed polarity, a strength, the asserting act, and the
+      agent.
 
   # CALLOUT: quality obo:BFO_0000019 is BFO Quality — a specifically dependent continuant that inheres in a bearer. Uncertainty and credibility are graded qualities.
   Uncertainty:
@@ -268,12 +261,6 @@ classes:
   # CALLOUT: model-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an UncertaintyModel describes a result's uncertainty quality.
   UncertaintyModel:
     subclass_of: cco:ont00000853
-    slots:
-      - quantifies
-      - family
-      - parameters
-      - confidenceLevel
-      - nature
     description: >-
       A Descriptive ICE that quantifies a result's uncertainty
       quality: a family, its parameters, a confidence level, and a
@@ -288,10 +275,6 @@ classes:
   # CALLOUT: line-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an EvidenceLine asserts that several pieces of evidence jointly bear on a claim under one strength.
   EvidenceLine:
     subclass_of: cco:ont00000853
-    slots:
-      - members
-      - strength
-      - bearsOn
     description: >-
       A Descriptive ICE grouping several pieces of evidence under
       one strength and asserting their joint bearing on a claim.
@@ -299,8 +282,6 @@ classes:
   # CALLOUT: study-act cco:ont00000228 is CCO Planned Act; a Study is a composite planned act over one question-to-conclusion cycle.
   Study:
     subclass_of: cco:ont00000228
-    slots:
-      - hasPart
     description: >-
       A planned process whose parts are the formations, searches,
       experiments, and analyses of one question-to-conclusion cycle.
@@ -429,107 +410,3 @@ slots:
     exact_mappings:
       - obo:BFO_0000199
     description: The interval over which this state holds.
-
-  subject:
-    range: Claim
-    description: >-
-      The claim that bears on another in an evidential relation.
-
-  object:
-    range: Claim
-    description: >-
-      The claim borne upon in an evidential relation.
-
-  polarity:
-    range: EvidentialPolarity
-    description: >-
-      Which cito-typed direction the relation takes — supports,
-      contradicts, or refines.
-
-  strength:
-    range: float
-    description: >-
-      How strongly the bearing holds; an unbounded float here, with
-      scale and bounds set in Chapter 7's facets. Shared by
-      EvidentialRelation and EvidenceLine.
-
-  assertedBy:
-    range: Act
-    description: >-
-      The act that asserted this relation; its agent and time are
-      reached through the act.
-
-  quantifies:
-    range: Uncertainty
-    description: The uncertainty quality this model quantifies.
-
-  family:
-    range: string
-    description: >-
-      The distribution or method family — Gaussian, bootstrap, and
-      so on. An open string, not enumerated.
-
-  parameters:
-    range: string
-    multivalued: true
-    description: >-
-      The model's parameters; free strings here, with structured
-      typing left to a later increment.
-
-  confidenceLevel:
-    range: float
-    description: >-
-      The confidence level the model reports, e.g. 0.95; its bounds
-      set in Chapter 7's facets.
-
-  nature:
-    range: UncertaintyNature
-    description: Whether the uncertainty is aleatory or epistemic.
-
-  members:
-    range: Evidence
-    multivalued: true
-    description: >-
-      The pieces of evidence this line groups under one strength.
-
-  bearsOn:
-    range: Claim
-    description: The claim the evidence line jointly bears on.
-
-  # CALLOUT: has-part obo:BFO_0000117 is BFO "has occurrent part" — a process to its sub-processes; a Study has its acts as occurrent parts.
-  hasPart:
-    range: Act
-    multivalued: true
-    exact_mappings:
-      - obo:BFO_0000117
-    description: >-
-      The acts that compose this study — the formations, searches,
-      experiments, and analyses of one question-to-conclusion cycle.
-
-enums:
-
-  EvidentialPolarity:
-    description: >-
-      The direction of an evidential relation, mirroring the bare
-      claim-relation slots and carrying the same CiTO typing.
-    permissible_values:
-      supports:
-        meaning: cito:supports
-        description: One claim bears positively on another.
-      contradicts:
-        meaning: cito:disputes
-        description: One claim bears negatively on another.
-      refines:
-        meaning: cito:extends
-        description: One claim refines or extends another.
-
-  UncertaintyNature:
-    description: >-
-      Whether a result's uncertainty is aleatory (irreducible
-      randomness) or epistemic (reducible lack of knowledge). A
-      plain enum for now; a URREF grounding is deferred.
-    permissible_values:
-      aleatory:
-        description: Irreducible variability in the phenomenon.
-      epistemic:
-        description: Reducible uncertainty from limited knowledge.

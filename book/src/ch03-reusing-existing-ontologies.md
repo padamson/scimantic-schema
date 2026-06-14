@@ -290,7 +290,7 @@ generated OWL still carries correct upstream ancestry.
 The decisions above land as changes to the `prefixes:` and `imports:` blocks in `schema/scimantic.yaml`:
 
 ```yaml
-{{#include listings/scimantic-yaml-v1.yaml}}
+{{#include listings/scimantic-yaml-v1.yaml caption="The reuse manifest"}}
 ```
 
 The prefix block is a reuse *manifest* {{#callout reuse-manifest}};

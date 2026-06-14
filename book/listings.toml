@@ -17,3 +17,27 @@ tag = "scimantic-yaml-v3"
 source = "../schema/scimantic.yaml"
 frozen = "src/listings/scimantic-yaml-v3.yaml"
 sha256 = "d0158f9b4722cd21633534c99e71e1b5e2fd159d514a918d17084d271b76fcc8"
+
+[[listing]]
+tag = "scimantic-yaml-v4"
+source = "../schema/scimantic.yaml"
+frozen = "src/listings/scimantic-yaml-v4.yaml"
+sha256 = "292486adb4859103737a0fde49318010c21ef8ecc9075e989dba47248add177c"
+
+[[listing]]
+tag = "scimantic-yaml-v5"
+source = "../schema/scimantic.yaml"
+frozen = "src/listings/scimantic-yaml-v5.yaml"
+sha256 = "86e5846f41f76a9348feb187d31aeebc3ec8a527aa1b678589ce732aeee61227"
+
+[[listing]]
+tag = "scimantic-yaml-v6"
+source = "../schema/scimantic.yaml"
+frozen = "src/listings/scimantic-yaml-v6.yaml"
+sha256 = "d3ff9264986db7fd8ef9407bdd18be09094c5760746a4f278d39cfe2190ab6e8"
+
+[[listing]]
+tag = "scimantic-yaml-v7"
+source = "../schema/scimantic.yaml"
+frozen = "src/listings/scimantic-yaml-v7.yaml"
+sha256 = "4b7922da5e9855a1ff460d881ebe47acffcd014f5bd7a5e8d65101674a745574"

@@ -50,12 +50,11 @@ consumers need it. This will enable fine-grained knowledge base development with
 
 ## What are we going to use the ontology for?
 
-Three concrete consumers drive the design:
+Two consumers drive the design:
 
-- **[scimantic-extension](https://github.com/padamson/scimantic-extension)** — VS Code
-  extension for authoring research notes as structured provenance
-  graphs. Needs Question / Hypothesis / Evidence / Premise / Conclusion
-  as first-class authoring concepts.
+- **A structured-provenance authoring tool** — for authoring research
+  notes as provenance graphs. Needs Question / Hypothesis / Evidence /
+  Premise / Conclusion as first-class authoring concepts.
 - **[t2t](https://github.com/padamson/t2t)** — book-and-app project
   building a "trunk-to-theory" knowledge system. Uses the full graph as
   the backing data model.
@@ -131,9 +130,8 @@ actually answer it.
   ontologies (BFO 2020, Common Core Ontologies) require ontology
   expertise; Chapter 3 starts that work and consults external
   references for each major term decision.
-- **Downstream maintainers**: scimantic-extension and t2t
-  developers re-validate against their build pipelines on each
-  scimantic-schema release tag.
+- **Downstream maintainers**: consumers such as t2t re-validate
+  against their build pipelines on each scimantic-schema release tag.
 
 ## What scimantic does *not* model
 

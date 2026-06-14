@@ -439,7 +439,7 @@ second pass's one manifest change — a `cito:` prefix, the only candidate
 here that needs one, since the rest live under the `obo:` prefix Chapter
 3 already declared. The manifest grows by one entry:
 
-{{#diff scimantic-yaml-v1 scimantic-yaml-v2}}
+{{#diff scimantic-yaml-v1 scimantic-yaml-v2 caption="Adding the CiTO prefix"}}
 
 The one caveat, recorded in the `cito` callout: CiTO's own narrative is
 about citations between documents, not claims, though its authors'

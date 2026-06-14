@@ -19,3 +19,16 @@ CLAUDE.md › Conventions.
     test shape")
 =============================================================
 -->
+
+<!-- ============================================================
+N&M QUOTE BANK — §Step 7 (ontology101.pdf, verbatim; lift into
+admonish quote blocks as this chapter is written). N&M Step 7 is
+instances only; validation is scimantic's own addition (re-running the
+competency questions as the litmus), so it has no N&M quote.
+
+§Step 7 — Create instances:
+"The last step is creating individual instances of classes in the
+hierarchy. Defining an individual instance of a class requires (1)
+choosing a class, (2) creating an individual instance of that class, and
+(3) filling in the slot values."
+============================================================ -->

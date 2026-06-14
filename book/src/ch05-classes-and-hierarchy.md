@@ -83,7 +83,7 @@ external IRI, so it stays the tool for cross-ontology grounding.)
 concrete {{#callout reuse-wholesale}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:274:286}}
+{{#include listings/scimantic-yaml-v3.yaml:274:286 caption="Dataset and Annotation, reused wholesale"}}
 ```
 
 The remaining foundational kinds and artifacts take their places — `Agent`
@@ -95,7 +95,7 @@ Document {{#callout document}} — the bearer evidence is drawn from, not the
 content — leaving the contested decisions the rest of the chapter settles:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:189:223}}
+{{#include listings/scimantic-yaml-v3.yaml:189:223 caption="Foundational kinds and artifacts"}}
 ```
 
 ## The claim spine
@@ -136,7 +136,7 @@ In the schema, that is `State` and its three standings, each grounded in
 CCO Stasis {{#callout stasis}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:160:187}}
+{{#include listings/scimantic-yaml-v3.yaml:160:187 caption="The three standings"}}
 ```
 
 ### Evidence and Premise: one claim, two standings
@@ -209,14 +209,14 @@ Descriptive Information Content Entity {{#callout ice}} by `subclass_of`
 {{#callout grounding}}, over `Hypothesis`, `Evidence`, and `Conclusion`:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:45:78}}
+{{#include listings/scimantic-yaml-v3.yaml:45:78 caption="The claim layer"}}
 ```
 
 It carries the three claim relations, mapped to CiTO and bound for
 reification into an `EvidentialRelation` when this chapter reaches it {{#callout cito-supports}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:288:307}}
+{{#include listings/scimantic-yaml-v3.yaml:288:307 caption="The claim relations"}}
 ```
 
 With the spine fixed, the next cluster turns to method and act.
@@ -274,14 +274,14 @@ grounded in CCO's Prescriptive ICE {{#callout prescriptive}}, with
 `ExperimentalMethod` and `AnalyticalMethod` under the general `Method`:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:139:158}}
+{{#include listings/scimantic-yaml-v3.yaml:139:158 caption="The method layer"}}
 ```
 
 And the nine acts that realize them, under the `Act` supertype
 {{#callout planned-act}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:80:137}}
+{{#include listings/scimantic-yaml-v3.yaml:80:137 caption="The nine acts"}}
 ```
 
 With method and act placed, the next cluster asks when a value or an
@@ -329,7 +329,7 @@ In the schema, that reified node is the `EvidentialRelation`
 {{#callout evrel-ice}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:225:231}}
+{{#include listings/scimantic-yaml-v3.yaml:225:231 caption="The reified evidential relation"}}
 ```
 
 ## Uncertainty as a model, not a number
@@ -388,7 +388,7 @@ In the schema, the uncertainty cluster is two BFO qualities
 the `StatisticalMethod` that derives them:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:233:258}}
+{{#include listings/scimantic-yaml-v3.yaml:233:258 caption="The uncertainty cluster"}}
 ```
 
 With reification settled, what remains is the layer above the individual
@@ -441,7 +441,7 @@ In the schema, the higher-level layer adds `EvidenceLine`
 (the `Claim` superclass the spine pressed for is already in place):
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:260:272}}
+{{#include listings/scimantic-yaml-v3.yaml:260:272 caption="The higher-level layer"}}
 ```
 
 ## Next

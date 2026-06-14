@@ -5,7 +5,7 @@
 - [Reusing Existing Ontologies](ch03-reusing-existing-ontologies.md)
 - [Important Terms](ch04-important-terms.md)
 - [Classes and Hierarchy](ch05-classes-and-hierarchy.md)
-- [Slots]()
+- [Slots](ch06-slots.md)
 - [Slot Usage and Facets]()
 - [Examples and Validation]()
 - [Publishing and Consumption]()

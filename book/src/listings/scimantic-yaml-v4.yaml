@@ -81,11 +81,6 @@ classes:
     abstract: true
     # CALLOUT: planned-act cco:ont00000228 is CCO Planned Act — a process that realizes a plan. Act specializes it.
     subclass_of: cco:ont00000228
-    slots:
-      - agent
-      - performedAt
-      - hasInput
-      - hasOutput
     description: >-
       An agentive planned process that produces or transforms
       artifacts. The shared supertype CQ 10, 14, and 15 quantify
@@ -120,24 +115,18 @@ classes:
 
   DesignOfExperiment:
     is_a: Act
-    slots:
-      - tests
     description: >-
       The act of designing an experimental method to test a
       hypothesis; the bearer of the prospective tests intent.
 
   Experimentation:
     is_a: Act
-    slots:
-      - executes
     description: >-
       The act that executes an experimental method, realizing its
       plan.
 
   Analysis:
     is_a: Act
-    slots:
-      - executes
     description: >-
       The act that applies a method to data to produce a result.
 
@@ -172,10 +161,6 @@ classes:
     abstract: true
     # CALLOUT: stasis cco:ont00000819 is CCO Stasis — a condition that persists unchanged over a temporal interval. State specializes it.
     subclass_of: cco:ont00000819
-    slots:
-      - qualifies
-      - establishedBy
-      - occursOver
     description: >-
       A condition that obtains over a temporal interval,
       established by an act. scimantic models standing as state
@@ -240,17 +225,10 @@ classes:
   # CALLOUT: evrel-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an EvidentialRelation is a reified, described claim-to-claim relation under it.
   EvidentialRelation:
     subclass_of: cco:ont00000853
-    slots:
-      - subject
-      - object
-      - polarity
-      - strength
-      - assertedBy
     description: >-
-      A reified claim-to-claim relation between a subject and an
-      object claim: a Descriptive ICE carrying a cito-typed
-      polarity, a strength, and the asserting act, through which
-      the agent and time are reached.
+      A reified claim-to-claim relation: a Descriptive ICE carrying a
+      cito-typed polarity, a strength, the asserting act, and the
+      agent.
 
   # CALLOUT: quality obo:BFO_0000019 is BFO Quality — a specifically dependent continuant that inheres in a bearer. Uncertainty and credibility are graded qualities.
   Uncertainty:
@@ -268,12 +246,6 @@ classes:
   # CALLOUT: model-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an UncertaintyModel describes a result's uncertainty quality.
   UncertaintyModel:
     subclass_of: cco:ont00000853
-    slots:
-      - quantifies
-      - family
-      - parameters
-      - confidenceLevel
-      - nature
     description: >-
       A Descriptive ICE that quantifies a result's uncertainty
       quality: a family, its parameters, a confidence level, and a
@@ -288,10 +260,6 @@ classes:
   # CALLOUT: line-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an EvidenceLine asserts that several pieces of evidence jointly bear on a claim under one strength.
   EvidenceLine:
     subclass_of: cco:ont00000853
-    slots:
-      - members
-      - strength
-      - bearsOn
     description: >-
       A Descriptive ICE grouping several pieces of evidence under
       one strength and asserting their joint bearing on a claim.
@@ -299,8 +267,6 @@ classes:
   # CALLOUT: study-act cco:ont00000228 is CCO Planned Act; a Study is a composite planned act over one question-to-conclusion cycle.
   Study:
     subclass_of: cco:ont00000228
-    slots:
-      - hasPart
     description: >-
       A planned process whose parts are the formations, searches,
       experiments, and analyses of one question-to-conclusion cycle.
@@ -342,194 +308,3 @@ slots:
     exact_mappings:
       - cito:extends
     description: Asserts that one claim refines or extends another.
-
-  # CALLOUT: has-agent cco:ont00001833 is CCO "has agent" — the relation tying an act to its performing agent.
-  agent:
-    range: Agent
-    multivalued: true
-    exact_mappings:
-      - cco:ont00001833
-    description: The agent or agents who performed an act.
-
-  # CALLOUT: occupies obo:BFO_0000199 is BFO "occupies temporal region" — an occurrent to the interval it runs over.
-  performedAt:
-    range: TemporalInterval
-    exact_mappings:
-      - obo:BFO_0000199
-    description: The temporal interval an act occupies.
-
-  tests:
-    range: Hypothesis
-    description: >-
-      The hypothesis a DesignOfExperiment is designed to test:
-      prospective intent, carried by the design act rather than the
-      method it produces.
-
-  # CALLOUT: prescribed-by cco:ont00001920 is CCO "prescribed by" — an act to the Prescriptive ICE (the Method) that guides it.
-  executes:
-    range: Method
-    exact_mappings:
-      - cco:ont00001920
-    description: >-
-      The method an act carries out; the act is prescribed by the
-      method's plan specification.
-
-  # CALLOUT: has-input cco:ont00001921 is CCO "has input" — the generic process-participation relation for an act's inputs.
-  hasInput:
-    multivalued: true
-    any_of:
-      - range: Claim
-      - range: Question
-      - range: Result
-      - range: Method
-      - range: Dataset
-      - range: Annotation
-      - range: SourceDocument
-    exact_mappings:
-      - cco:ont00001921
-    description: >-
-      An artifact an act consumes; ranged broadly over the schema's
-      artifacts here, narrowed per-act in Chapter 7.
-
-  # CALLOUT: has-output cco:ont00001986 is CCO "has output" — the generic relation for an act's outputs.
-  hasOutput:
-    multivalued: true
-    any_of:
-      - range: Claim
-      - range: Question
-      - range: Result
-      - range: Method
-      - range: Dataset
-      - range: Annotation
-      - range: SourceDocument
-    exact_mappings:
-      - cco:ont00001986
-    description: >-
-      An artifact an act produces; ranged broadly here, narrowed
-      per-act in Chapter 7's facets.
-
-  qualifies:
-    any_of:
-      - range: Claim
-      - range: Method
-    description: >-
-      The claim or method whose standing this state records — the
-      entity it qualifies.
-
-  # CALLOUT: caused-by cco:ont00001819 is CCO "caused by" — a state (itself a Stasis process) to the act that conferred it.
-  establishedBy:
-    range: Act
-    exact_mappings:
-      - cco:ont00001819
-    description: The act that established this state.
-
-  # CALLOUT: state-occupies obo:BFO_0000199 is BFO "occupies temporal region" — a state to the interval it holds over, as performedAt does for an act.
-  occursOver:
-    range: TemporalInterval
-    exact_mappings:
-      - obo:BFO_0000199
-    description: The interval over which this state holds.
-
-  subject:
-    range: Claim
-    description: >-
-      The claim that bears on another in an evidential relation.
-
-  object:
-    range: Claim
-    description: >-
-      The claim borne upon in an evidential relation.
-
-  polarity:
-    range: EvidentialPolarity
-    description: >-
-      Which cito-typed direction the relation takes — supports,
-      contradicts, or refines.
-
-  strength:
-    range: float
-    description: >-
-      How strongly the bearing holds; an unbounded float here, with
-      scale and bounds set in Chapter 7's facets. Shared by
-      EvidentialRelation and EvidenceLine.
-
-  assertedBy:
-    range: Act
-    description: >-
-      The act that asserted this relation; its agent and time are
-      reached through the act.
-
-  quantifies:
-    range: Uncertainty
-    description: The uncertainty quality this model quantifies.
-
-  family:
-    range: string
-    description: >-
-      The distribution or method family — Gaussian, bootstrap, and
-      so on. An open string, not enumerated.
-
-  parameters:
-    range: string
-    multivalued: true
-    description: >-
-      The model's parameters; free strings here, with structured
-      typing left to a later increment.
-
-  confidenceLevel:
-    range: float
-    description: >-
-      The confidence level the model reports, e.g. 0.95; its bounds
-      set in Chapter 7's facets.
-
-  nature:
-    range: UncertaintyNature
-    description: Whether the uncertainty is aleatory or epistemic.
-
-  members:
-    range: Evidence
-    multivalued: true
-    description: >-
-      The pieces of evidence this line groups under one strength.
-
-  bearsOn:
-    range: Claim
-    description: The claim the evidence line jointly bears on.
-
-  # CALLOUT: has-part obo:BFO_0000117 is BFO "has occurrent part" — a process to its sub-processes; a Study has its acts as occurrent parts.
-  hasPart:
-    range: Act
-    multivalued: true
-    exact_mappings:
-      - obo:BFO_0000117
-    description: >-
-      The acts that compose this study — the formations, searches,
-      experiments, and analyses of one question-to-conclusion cycle.
-
-enums:
-
-  EvidentialPolarity:
-    description: >-
-      The direction of an evidential relation, mirroring the bare
-      claim-relation slots and carrying the same CiTO typing.
-    permissible_values:
-      supports:
-        meaning: cito:supports
-        description: One claim bears positively on another.
-      contradicts:
-        meaning: cito:disputes
-        description: One claim bears negatively on another.
-      refines:
-        meaning: cito:extends
-        description: One claim refines or extends another.
-
-  UncertaintyNature:
-    description: >-
-      Whether a result's uncertainty is aleatory (irreducible
-      randomness) or epistemic (reducible lack of knowledge). A
-      plain enum for now; a URREF grounding is deferred.
-    permissible_values:
-      aleatory:
-        description: Irreducible variability in the phenomenon.
-      epistemic:
-        description: Reducible uncertainty from limited knowledge.
