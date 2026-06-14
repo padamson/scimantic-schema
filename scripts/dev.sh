@@ -4,7 +4,7 @@
 # Simulate GitHub Pages locally with hot reload across:
 #   - the schema source (`schema/scimantic.yaml`)
 #   - the book source (`book/src/`, `book/*.toml`)
-#   - PRODUCER source code (panschema, mdbook-admonish)
+#   - PRODUCER source code (panschema, mdbook-listings, mdbook-admonish)
 #
 # Editing any of these triggers a full rebuild: refreshes producer debug
 # binaries (incremental `cargo build`), then regenerates the book and
@@ -31,16 +31,15 @@
 # Stop with Ctrl+C.
 #
 # Requires (in this repo):
-#   - mdbook, mdbook-listings, mdbook-admonish, panschema on PATH.
-#     mdbook and mdbook-listings are released (crates.io); panschema and
-#     mdbook-admonish are local-checkout producers, ideally aliased to
-#     their target/debug binaries (see README "Dogfooding the tooling").
+#   - mdbook, mdbook-listings, mdbook-admonish, panschema on PATH —
+#     ideally as aliases pointing at producer target/debug binaries
+#     (see README "Dogfooding the tooling").
 #   - watchexec (general-purpose file watcher; cargo-watch is the wrong
 #     tool here because scimantic-schema is not a Cargo project):
 #       cargo install watchexec-cli
 #
 # Requires (in adjacent producer repos under ~/src/github-padamson/):
-#   - panschema/, mdbook-admonish/ cloned with working
+#   - panschema/, mdbook-listings/, mdbook-admonish/ cloned with working
 #     trees. Any missing producer is skipped with a warning.
 #
 # Optional:
@@ -53,8 +52,8 @@ cd "$(git rev-parse --show-toplevel)"
 PORT="${PORT:-8000}"
 export PORT
 
-# When set, skip building/watching the producers (panschema, mdbook-admonish);
-# use the binaries on PATH and only regenerate the site.
+# When set, skip building/watching the producers (panschema, mdbook-listings,
+# mdbook-admonish); use the binaries on PATH and only regenerate the site.
 SKIP_PRODUCER_BUILD="${SKIP_PRODUCER_BUILD:-}"
 export SKIP_PRODUCER_BUILD
 
@@ -88,12 +87,12 @@ watch_args=(
 
 # Producer source paths. For each producer repo present locally, watch:
 #   - top-level Cargo.toml
-#   - top-level src/ if present (single-crate repo: mdbook-admonish)
+#   - top-level src/ if present (single-crate repos: mdbook-listings, mdbook-admonish)
 #   - any workspace sub-crate's Cargo.toml + src/ (panschema's workspace
 #     has panschema/, panschema-viz/)
 # Crucially do NOT watch the whole repo — target/ would create a rebuild loop.
 producer_dirs=()
-for producer in panschema mdbook-admonish; do
+for producer in panschema mdbook-listings mdbook-admonish; do
   # SKIP_PRODUCER_BUILD: don't watch producer source — you're driving the
   # producer's build in its own repo, so leave it out of this loop.
   [ -n "${SKIP_PRODUCER_BUILD:-}" ] && break

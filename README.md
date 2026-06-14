@@ -93,24 +93,23 @@ panschema can also emit `ttl`, `jsonld`, `rdfxml`, `ntriples` via
 ## Dogfooding the tooling
 
 This repo is [panschema](https://github.com/padamson/panschema)'s flagship
-dogfood case, and also exercises the `mdbook-admonish` fork. (mdbook-listings
-is a *published* crates.io dependency, pinned in CI and consumed like any
-release — it's no longer a local-checkout producer here. Re-add it below if
-you pick its development back up.) When you iterate on a producer's source,
-`scripts/dev.sh` can rebuild it and regenerate the site from the fresh
-binary, so producer changes show up live.
+dogfood case, and also exercises `mdbook-listings` and the `mdbook-admonish`
+fork. When you iterate on a producer's source, `scripts/dev.sh` can rebuild
+it and regenerate the site from the fresh binary, so producer changes show
+up live.
 
 ### The alias pattern
 
-`scripts/rebuild.sh` invokes the local-checkout producers by name
-(`panschema`, `mdbook-admonish`). To make both the scripts and your
+`scripts/rebuild.sh` invokes producers by name (`panschema`,
+`mdbook-listings`, `mdbook-admonish`). To make both the scripts and your
 interactive shell use your **local debug builds** instead of the
-`cargo install`-ed releases, clone them under `~/src/github-padamson/` and
-alias each to its `target/debug` binary:
+`cargo install`-ed releases, clone the producers under
+`~/src/github-padamson/` and alias each to its `target/debug` binary:
 
 ```zsh
 # ~/.zshrc
 alias panschema="$HOME/src/github-padamson/panschema/target/debug/panschema"
+alias mdbook-listings="$HOME/src/github-padamson/mdbook-listings/target/debug/mdbook-listings"
 alias mdbook-admonish="$HOME/src/github-padamson/mdbook-admonish/target/debug/mdbook-admonish"
 ```
 
