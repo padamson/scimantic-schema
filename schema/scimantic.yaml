@@ -186,6 +186,91 @@ classes:
       The standing of a claim or method whose acceptance has been
       withdrawn.
 
+  # CALLOUT: agent cco:ont00001017 is CCO Agent — a material entity that bears intentions and performs acts. scimantic's Agent grounds in it by subclass_of, owning the class so provenance slots can hang on it.
+  Agent:
+    subclass_of: cco:ont00001017
+    description: >-
+      A material entity that performs acts and bears responsibility
+      for them — a researcher, group, or institution.
+
+  # CALLOUT: temporal-interval obo:BFO_0000038 is BFO one-dimensional temporal region — a temporal region with extent. scimantic's TemporalInterval grounds in it by subclass_of; an act occupies one rather than a single instant.
+  TemporalInterval:
+    subclass_of: obo:BFO_0000038
+    description: >-
+      The stretch of time an act occupies, with a beginning and an
+      end rather than a single instant.
+
+  # CALLOUT: ice-general cco:ont00000958 is CCO Information Content Entity — the general ICE, parent of the Descriptive and Prescriptive branches. A Question is an ICE but neither: it asks rather than asserts or prescribes.
+  Question:
+    subclass_of: cco:ont00000958
+    description: >-
+      An information content entity expressing what an inquiry seeks
+      to answer; the output of a QuestionFormation and the start of
+      a provenance chain.
+
+  # CALLOUT: descriptive-ice cco:ont00000853 is CCO Descriptive Information Content Entity — content that describes. A Result describes a finding.
+  Result:
+    subclass_of: cco:ont00000853
+    description: >-
+      A finding produced by an Analysis; the input a ResultAssessment
+      weighs in drawing a conclusion.
+
+  # CALLOUT: document cco:ont00001298 is CCO Document — an Information Bearing Artifact that bears information content (a paper or file): the *bearer*, distinct from the ICE content it carries.
+  SourceDocument:
+    subclass_of: cco:ont00001298
+    description: >-
+      A document a LiteratureSearch surfaces and an Annotation marks
+      up; the bearer a piece of Evidence is extracted from.
+
+  # CALLOUT: evrel-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an EvidentialRelation is a reified, described claim-to-claim relation under it.
+  EvidentialRelation:
+    subclass_of: cco:ont00000853
+    description: >-
+      A reified claim-to-claim relation: a Descriptive ICE carrying a
+      cito-typed polarity, a strength, the asserting act, and the
+      agent.
+
+  # CALLOUT: quality obo:BFO_0000019 is BFO Quality — a specifically dependent continuant that inheres in a bearer. Uncertainty and credibility are graded qualities.
+  Uncertainty:
+    subclass_of: obo:BFO_0000019
+    description: >-
+      A quality of a result quantifying how much it could vary;
+      borne by the result, quantified by an UncertaintyModel.
+
+  Credibility:
+    subclass_of: obo:BFO_0000019
+    description: >-
+      A graded quality of a piece of evidence expressing how far it
+      can be relied on; conferred by an EvidenceAssessment.
+
+  # CALLOUT: model-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an UncertaintyModel describes a result's uncertainty quality.
+  UncertaintyModel:
+    subclass_of: cco:ont00000853
+    description: >-
+      A Descriptive ICE that quantifies a result's uncertainty
+      quality: a family, its parameters, a confidence level, and a
+      nature (aleatory or epistemic).
+
+  StatisticalMethod:
+    is_a: AnalyticalMethod
+    description: >-
+      An analytical method prescribing how to derive a result's
+      uncertainty and credibility from data.
+
+  # CALLOUT: line-ice cco:ont00000853 is CCO Descriptive Information Content Entity; an EvidenceLine asserts that several pieces of evidence jointly bear on a claim under one strength.
+  EvidenceLine:
+    subclass_of: cco:ont00000853
+    description: >-
+      A Descriptive ICE grouping several pieces of evidence under
+      one strength and asserting their joint bearing on a claim.
+
+  # CALLOUT: study-act cco:ont00000228 is CCO Planned Act; a Study is a composite planned act over one question-to-conclusion cycle.
+  Study:
+    subclass_of: cco:ont00000228
+    description: >-
+      A planned process whose parts are the formations, searches,
+      experiments, and analyses of one question-to-conclusion cycle.
+
   # CALLOUT: reuse-wholesale Dataset and Annotation are reused wholesale from DCAT and the W3C Web Annotation model: class_uri co-identifies scimantic's class with the external one (it *is* that class). This is the counterpart to subclass_of grounding, which is for scimantic's own specializations of a BFO/CCO category.
   Dataset:
     class_uri: dcat:Dataset

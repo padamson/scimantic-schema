@@ -40,9 +40,12 @@ promised is dropped.
     (Ch 5 §"Standing as state")
 [ ] Act participation — agent, time (a TemporalInterval, not a
     createdAt instant), inputs, and outputs on Act. (Ch 5 §Anchoring)
-[ ] Uncertainty quality — whether scimantic fills CCO's gap under
-    BFO Quality, with URREF's guidance.
-    (Ch 3 §"the one place CCO leaves a gap")
+[ ] Reified-class slots — the fields the new reification classes carry:
+    EvidentialRelation's cito polarity / strength / asserting act /
+    agent; UncertaintyModel's family / parameters / confidence / nature
+    (nature: a urref: mapping or a plain enum — URREF deferred per Ch 3);
+    EvidenceLine's members + strength;
+    Study's parts. (Ch 5 §Reification, §Uncertainty, §"higher-level layer")
 =============================================================
 -->
 

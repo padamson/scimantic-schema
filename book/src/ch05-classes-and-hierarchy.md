@@ -40,12 +40,13 @@ kinds Chapter 3 committed to. Placing the harvest under them is mostly
 mechanical:
 
 - **Artifacts** are information content entities (CCO Information Content
-  Entity, under BFO *continuant*), and they fall into two of CCO's ICE
-  kinds the chapter leans on. The *claims* (questions, hypotheses,
-  evidence, results, conclusions) are **Descriptive** ICEs: content
-  asserting what is or might be the case. The *methods* are
-  **Prescriptive** ICEs (CCO's directive branch): content prescribing
-  what to do. Datasets and annotations are ICEs alongside them.
+  Entity, under BFO *continuant*), falling into a few of CCO's ICE kinds.
+  The *claims* — hypotheses, evidence, results, conclusions — are
+  **Descriptive** ICEs: content asserting what is or might be the case.
+  A *question* is an ICE too, but interrogative rather than descriptive
+  (it asks, it does not assert), so it grounds in the general ICE. The
+  *methods* are **Prescriptive** ICEs (CCO's directive branch): content
+  prescribing what to do. Datasets and annotations are ICEs alongside them.
 - **Acts** — the formations, searches, assessments, experiments,
   analyses — are planned acts (CCO Planned Act, under BFO *occurrent*).
 - **States** are conditions grounded in CCO Stasis (the subject of the
@@ -78,11 +79,23 @@ is `dcat:Dataset`, `Annotation` is `oa:Annotation`. (LinkML marks
 external IRI, so it stays the tool for cross-ontology grounding.)
 ```
 
-The two classes scimantic *reuses wholesale* make the `class_uri` side of
-that distinction concrete {{#callout reuse-wholesale}}:
+`Dataset` and `Annotation` make the `class_uri` side of that distinction
+concrete {{#callout reuse-wholesale}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:189:201}}
+{{#include listings/scimantic-yaml-v3.yaml:274:286}}
+```
+
+The remaining foundational kinds and artifacts take their places — `Agent`
+grounded in CCO Agent {{#callout agent}} and an act's `TemporalInterval`
+in BFO's one-dimensional temporal region {{#callout temporal-interval}},
+`Question` under the general ICE {{#callout ice-general}}, `Result` a
+Descriptive ICE {{#callout descriptive-ice}}, and `SourceDocument` a CCO
+Document {{#callout document}} — the bearer evidence is drawn from, not the
+content — leaving the contested decisions the rest of the chapter settles:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:189:223}}
 ```
 
 ## The claim spine
@@ -203,7 +216,7 @@ It carries the three claim relations, mapped to CiTO and bound for
 reification into an `EvidentialRelation` when this chapter reaches it {{#callout cito-supports}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:203:222}}
+{{#include listings/scimantic-yaml-v3.yaml:288:307}}
 ```
 
 With the spine fixed, the next cluster turns to method and act.
@@ -309,7 +322,15 @@ but every derivation already has an act behind it that holds the agent
 and the inputs, and reifying the edge as well would record the same
 provenance twice. The evidence *line*, which groups several pieces of
 evidence under one strength, is a reification too, but it belongs to the
-higher-level layer, the chapter's capstone, so it waits there.
+higher-level layer — the chapter's capstone — so it is introduced there,
+not here.
+
+In the schema, that reified node is the `EvidentialRelation`
+{{#callout evrel-ice}}:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:225:231}}
+```
 
 ## Uncertainty as a model, not a number
 
@@ -340,12 +361,16 @@ than loading structure onto a bare quality. The quality stays a BFO
 Quality, as Chapter 3 grounded it; the model is the ICE that describes
 it.
 
-This is where URREF binds. Chapter 3 committed to URREF in principle and
-pinned it behind a thin placeholder until the uncertainty classes landed;
-they land here. The model's **nature** facet, aleatory versus epistemic,
-is URREF's distinction, so the `UncertaintyModel` and its `nature` carry
-`urref:` mapping annotations where the IRIs are stable, holding the
-deferred-binding posture Chapter 3 set for the rest.
+Chapter 3 committed to URREF in principle for exactly this: the model's
+**nature** facet, aleatory versus epistemic, is URREF's distinction. But
+nothing binds in this chapter. `nature` is itself a Step-5 slot (Chapter
+6), and URREF's namespace is still the provisional placeholder Chapter 3
+flagged — so the `UncertaintyModel` carries no `urref:` mapping here.
+scimantic adopts the distinction now and defers its encoding — a `urref:`
+mapping, or a plain enum if URREF's IRIs never settle — to Chapter 6. And
+it would be a *mapping* target, not a grounding: scimantic stays grounded
+in BFO/CCO and points out to URREF the way the claim relations point to
+CiTO, on the deferred footing Chapter 3 set.
 
 CQ 12's second half, *how was it derived*, is a relationship the
 reification policy sends to an act. By what statistical method were the
@@ -357,6 +382,15 @@ that carries it out. Credibility is the simpler sibling of uncertainty, a
 graded quality whose provenance is the `EvidenceAssessment` that produced
 it, with no structured model of its own.
 
+In the schema, the uncertainty cluster is two BFO qualities
+{{#callout quality}} — `Uncertainty` and `Credibility` — the
+`UncertaintyModel` {{#callout model-ice}} that quantifies the first, and
+the `StatisticalMethod` that derives them:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:233:258}}
+```
+
 With reification settled, what remains is the layer above the individual
 artifacts: whether the evidence line, the `Claim` superclass the spine
 pressed for, and a `Study` container earn a place. That is the
@@ -364,29 +398,22 @@ higher-level layer, and it is the last cluster.
 
 ## The higher-level layer
 
-The last decision is whether to build a layer above the individual
-artifacts or keep the flatter vocabulary the harvest produced. ch04
-surfaced three candidates from the *neighbors* questions, and those same
-questions settle them: each is demanded, so each earns a place.
-
-**A `Claim` superclass.** The spine already pressed for it. Because a
-hypothesis is optional in the chain, `supports`, `contradicts`, and
-`refines` cannot range on `Hypothesis`; they need a shared parent over
-everything a claim relation can touch. The neighbors question makes the
-demand explicit: *given any claim, hypothesis, premise, or conclusion,
-what supports and what challenges it?* A query cannot range over "any
-claim" unless the schema names one. So `Claim` is a Descriptive ICE over
-`Hypothesis`, `Evidence` (and the premise it becomes), and `Conclusion`:
-the things that assert something about the world, and the things an
-`EvidentialRelation` connects. With `Claim` in place, that relation gets
-its precise shape at last, a reified link from one claim to another.
+The last cluster asks whether anything sits *above* the individual
+artifacts, or whether the flatter, artifact-by-artifact vocabulary is
+enough. ch04 surfaced three candidates from the *neighbors* questions.
+One — the `Claim` superclass — the spine already settled and the schema
+already has: the neighbors question (*given any claim, hypothesis,
+premise, or conclusion, what supports and what challenges it?*) only
+confirms why a queryable parent had to exist, and `Claim` is the parent an
+`EvidentialRelation` links. The other two are new, and each is demanded.
 
 **An `EvidenceLine`.** The reification section deferred this grouping to
 here. The neighbors ask *how many independent lines of evidence back a
 conclusion, and how strong is each?* A query cannot count lines or weigh
 them unless a line is a thing. So an `EvidenceLine` is the reified
-grouping the policy pointed to: an ICE collecting several pieces of
-evidence under one strength, bearing on a claim. This is the closest
+grouping the policy pointed to: a Descriptive ICE collecting several
+pieces of evidence under one strength, asserting their joint bearing on a
+claim. This is the closest
 scimantic comes to an off-the-shelf model. SEPIO names an *evidence
 line* for exactly this, and Micropublications reifies evidence the same
 way; both become mapping targets on the deferred footing Chapter 3 set
@@ -403,11 +430,19 @@ the same idea, and OBCS or STATO a home for the `StatisticalMethod` the
 reification section named; both stay candidate mappings, deferred until
 scimantic mints the classes, as the second pass left them.
 
-Each of the three was forced by a neighbors question rather than chosen
-for elegance, and each closes a thread left open earlier: `Claim`
-answers the spine's pressure, `EvidenceLine` discharges the deferred
-reification, and the typed `EvidentialRelation` finally has its
-claim-to-claim shape. The structural work is done.
+Each was forced by a neighbors question rather than chosen for elegance:
+`EvidenceLine` discharges the reification the earlier section deferred,
+and `Study` gives the acts and artifacts of one inquiry a container to
+belong to. With them placed — and `Claim` already settled — the
+structural work of Step 4 is done.
+
+In the schema, the higher-level layer adds `EvidenceLine`
+{{#callout line-ice}} and the `Study` container {{#callout study-act}}
+(the `Claim` superclass the spine pressed for is already in place):
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:260:272}}
+```
 
 ## Next
 
