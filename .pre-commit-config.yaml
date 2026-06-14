@@ -1,0 +1,34 @@
+# prek / pre-commit hooks for scimantic-schema.
+#
+# Compatible with both `prek` (the Rust reimplementation) and vanilla
+# `pre-commit` — same config format. Install the runner once:
+#   prek install        # or: pre-commit install
+#
+# All hooks are `local` (language: system): they invoke binaries already on
+# PATH, matching the dogfood setup (see README "Dogfooding the tooling"), so
+# no remote hook repos are pulled. Required on PATH:
+#   - mdbook-listings (crates.io release)
+#   - awk + git (for the line-width gate; both standard)
+repos:
+  - repo: local
+    hooks:
+      - id: mdbook-listings-verify
+        name: mdbook-listings verify (frozen listing drift)
+        # Fails on a frozen snapshot whose bytes no longer match
+        # listings.toml (edited but not re-frozen), or a broken
+        # {{#include}} / {{#callout}}. The integrity check `mdbook build`
+        # does not run on its own. Invoked from the book root.
+        entry: mdbook-listings verify --book-root book
+        language: system
+        pass_filenames: false
+        files: ^(schema/scimantic\.yaml|book/(src/.*\.md|listings/.*|listings\.toml))$
+
+      - id: schema-line-width
+        name: schema content line width (<=72, excl. CALLOUT markers)
+        # Enforces the .yamllint column budget so the frozen listings don't
+        # horizontal-scroll. Comment-aware (skips CALLOUT marker lines),
+        # which yamllint --strict can't do without false-failing on them.
+        entry: scripts/check-line-width.sh
+        language: system
+        pass_filenames: false
+        files: ^schema/scimantic\.yaml$

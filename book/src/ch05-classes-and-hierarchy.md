@@ -43,9 +43,9 @@ mechanical:
   Entity, under BFO *continuant*), and they fall into two of CCO's ICE
   kinds the chapter leans on. The *claims* (questions, hypotheses,
   evidence, results, conclusions) are **Descriptive** ICEs: content
-  asserting what is or might be the case. The *methods* are **Directive**
-  ICEs: content prescribing what to do. Datasets and annotations are
-  ICEs alongside them.
+  asserting what is or might be the case. The *methods* are
+  **Prescriptive** ICEs (CCO's directive branch): content prescribing
+  what to do. Datasets and annotations are ICEs alongside them.
 - **Acts** — the formations, searches, assessments, experiments,
   analyses — are planned acts (CCO Planned Act, under BFO *occurrent*).
 - **States** are conditions grounded in CCO Stasis (the subject of the
@@ -65,14 +65,24 @@ located at a `TemporalInterval`, not stamped with a single `createdAt`
 instant, which would be false for an experiment that runs for days.
 These are the scaffold the contested decisions hang on.
 
-```admonish info title="How the grounding is written: subclass_of"
+```admonish info title="Grounding vs reuse: subclass_of and class_uri"
 LinkML's `is_a` links classes *within* a schema; it cannot point at an
 external term. So each anchor grounds in its BFO/CCO category with
 **`subclass_of`**, LinkML's `rdfs:subClassOf` to an external CURIE, and
-the domain classes that `is_a` the anchor inherit it. This is the pattern
-Biolink uses to anchor in BFO. (LinkML marks `subclass_of` deprecated in
-favor of `is_a`, but `is_a` cannot reach an external IRI, so it stays the
-tool for cross-ontology grounding.)
+the domain classes that `is_a` the anchor inherit it (the pattern Biolink
+uses to anchor in BFO). That is how scimantic *specializes* a category.
+A class it *reuses wholesale* instead sets **`class_uri`** to the external
+term directly, co-identifying with it rather than subclassing: `Dataset`
+is `dcat:Dataset`, `Annotation` is `oa:Annotation`. (LinkML marks
+`subclass_of` deprecated in favor of `is_a`, but `is_a` cannot reach an
+external IRI, so it stays the tool for cross-ontology grounding.)
+```
+
+The two classes scimantic *reuses wholesale* make the `class_uri` side of
+that distinction concrete {{#callout reuse-wholesale}}:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:189:201}}
 ```
 
 ## The claim spine
@@ -99,12 +109,22 @@ act.
 So scimantic models standing as a reified **State**, grounded in CCO's
 *Stasis*: a condition that obtains over a `TemporalInterval` and points
 back to the act that established it and the agent who performed it.
-`OpenState`, `AcceptedState`, `RetractedState`, and `StandingState` are
-subtypes of `State`, each attached to the entity it qualifies. This is
-the cross-cutting decision of the cluster: once standing is a state, the
-same pattern carries an open question, an accepted or retracted premise,
-a conclusion standing unrefuted, and a method validated by execution.
-The next two decisions spend it.
+`OpenState`, `AcceptedState`, and `RetractedState` are subtypes of
+`State`, each attached to the entity it qualifies. They are
+kind-agnostic: the standing lives in the act that confers it and the
+interval it holds over, not in a class per claim type, so three
+adjudication standings cover every entity rather than one state each.
+This is the cross-cutting decision of the cluster: once standing is a
+state, the same three carry an open question, an accepted or retracted
+premise, a conclusion accepted in review and standing until refuted, and
+a method validated by execution. The next two decisions spend it.
+
+In the schema, that is `State` and its three standings, each grounded in
+CCO Stasis {{#callout stasis}}:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:160:187}}
+```
 
 ### Evidence and Premise: one claim, two standings
 
@@ -115,15 +135,27 @@ derived from another. With standing now modeled as state, the
 resolution is direct.
 
 A piece of evidence is an information content entity: a claim about the
-world, under CCO's Information Content Entity. An `EvidenceAssessment`
+world, under CCO's Descriptive Information Content Entity. An
+`EvidenceAssessment`
 weighs it for credibility and, if it passes, confers an `AcceptedState`.
 The premise *is that same claim*, now bearing the accepted state. There
-is no second class and no `derivedFrom` edge; `promotedFrom` is
+is no second class and no `derivedFrom` edge {{#callout claim-spine}}; `promotedFrom` is
 identity-preserving, a transition in standing rather than the creation
 of a new node. CQ 4 then filters evidence by a queryable state, and
 CQ 5 — which needs a premise to be a node you can traverse *from* into
 `HypothesisFormation` — is satisfied because the premise is the evidence
 node itself, reached with no indirection.
+
+Step 4 places the pieces — the `Evidence` claim, the `AcceptedState` it
+comes to bear, and the `EvidenceAssessment` that confers it — but the
+promotion *between* them is relational: a claim bearing a state, an act
+conferring it. Those are slots, so the wiring that makes the promotion
+queryable, and `promotedFrom` a transition rather than a phrase, is
+Step 5 work that lands in Chapter 6. The listings here show the
+participating classes; the slots that carry a promotion come with the
+rest of the slot work. This is also why the three pieces sit in three
+different listings below — the claim layer, the states, and the acts —
+rather than in one place: nothing yet binds them into a single view.
 
 One distinction still earns a name. *Accepted* is a state, the outcome
 of assessment. *Premise* is better read as a **role**, in BFO's sense of
@@ -141,8 +173,9 @@ Does the chain require a hypothesis? The seeded vocabulary runs Question
 conclusion descends from a hypothesis. [Chapter 2's
 scope](ch02-domain-and-scope.md#what-domain-does-scimantic-cover) says
 otherwise: it admits a literature-only meta-analysis, and the lesson
-scimantic took from EXPO (Step 2's decline) is that some inquiry is
-exploratory, with no prior hypothesis to test. Forcing a `Hypothesis`
+scimantic took from EXPO — the experiment ontology Chapter 4 declined to
+reuse, because it builds on SUMO rather than the BFO/CCO base — is that
+some inquiry is exploratory, with no prior hypothesis to test. Forcing a `Hypothesis`
 node into every lineage would mismodel exactly the inquiry the domain
 claims to cover.
 
@@ -158,6 +191,21 @@ touch — hypothesis, premise, conclusion alike. The pressure for a
 `Claim` superclass starts here, and the chapter settles it when it
 reaches that layer.
 
+The claim layer is a single abstract `Claim`, grounded in CCO's
+Descriptive Information Content Entity {{#callout ice}} by `subclass_of`
+{{#callout grounding}}, over `Hypothesis`, `Evidence`, and `Conclusion`:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:45:78}}
+```
+
+It carries the three claim relations, mapped to CiTO and bound for
+reification into an `EvidentialRelation` when this chapter reaches it {{#callout cito-supports}}:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:203:222}}
+```
+
 With the spine fixed, the next cluster turns to method and act.
 
 ## Method and act
@@ -167,11 +215,12 @@ experimental method a reusable template, or a thing made fresh for each
 study? ch04 named this the chapter's biggest single tension. It resolves
 the way Evidence and Premise did, by dissolving the dichotomy.
 
-A method is a **plan specification**: a Directive information content
-entity that prescribes how to carry out an act. As an ICE it is a
+A method is a **plan specification**: a Prescriptive information
+content entity (CCO's directive branch) that prescribes how to carry
+out an act. As an ICE it is a
 continuant, existing independently of any particular run, and an act
 *realizes* it. `Experimentation` realizes an `ExperimentalMethod`;
-`Analysis` realizes an analytical method. That is the reusable,
+`Analysis` realizes an `AnalyticalMethod`. That is the reusable,
 one-to-many shape CQ 9 ("what experiments executed a given method") and
 CQ 10 ("what *act* applied a method") require: a method is executed by
 many acts, and "act" generalizes across experimentation and analysis,
@@ -199,15 +248,32 @@ collapse, because they sit on different nodes: an act and a claim.
 Two threads from the spine run through here. A method is realized by an
 act exactly as a premise's role is realized by a hypothesis formation:
 the schema leans on BFO's one machinery for realizable entities in both
-places. And the `State` pattern reaches methods too, a method gaining a
-`ValidatedState` once an execution succeeds, as a premise gains an
-accepted one.
+places. And the `State` pattern reaches methods too, a method gaining an
+`AcceptedState` when a successful execution validates it, as a premise
+gains one when an assessment accepts it.
 
 Which CCO relation `executes` should map to, rather than a freshly
 minted slot, is a Step 5 question that waits with the other slot
-decisions for Chapter 6. With method and act placed, the next cluster
-asks when a value or an edge should become a node of its own: the
-reification questions behind uncertainty and the evidential relation.
+decisions for Chapter 6.
+
+Both halves are in the schema now. The `Method` plan specifications,
+grounded in CCO's Prescriptive ICE {{#callout prescriptive}}, with
+`ExperimentalMethod` and `AnalyticalMethod` under the general `Method`:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:139:158}}
+```
+
+And the nine acts that realize them, under the `Act` supertype
+{{#callout planned-act}}:
+
+```yaml
+{{#include listings/scimantic-yaml-v3.yaml:80:137}}
+```
+
+With method and act placed, the next cluster asks when a value or an
+edge should become a node of its own: the reification questions behind
+uncertainty and the evidential relation.
 
 ## Reification: when an edge becomes a node
 
@@ -286,7 +352,7 @@ reification policy sends to an act. By what statistical method were the
 result's uncertainty and credibility computed, from what inputs, by which
 agent? Those are properties of a derivation, so the derivation is an act:
 a deriving act applying a **`StatisticalMethod`**, which is a `Method` in
-the sense the last cluster fixed, a Directive ICE realized by the act
+the sense the last cluster fixed, a Prescriptive ICE realized by the act
 that carries it out. Credibility is the simpler sibling of uncertainty, a
 graded quality whose provenance is the `EvidenceAssessment` that produced
 it, with no structured model of its own.

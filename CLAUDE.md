@@ -105,3 +105,14 @@ site (schema HTML + the book) is built and deployed by
   referenced via `class_uri`/`slot_uri` + prefixes (and mapping
   annotations), *not* LinkML `imports:` (which is for other LinkML
   schemas — only `linkml:types` is imported).
+- **Deferrals are tracked in the target chapter's scaffold.** When
+  prose defers work to a later chapter or N&M step ("deferred to
+  Chapter 6", "Step 5 work", "Chapter 8 will revisit"), add a
+  matching `[ ]` TODO line in that chapter's draft `.md` scaffold,
+  inside an HTML-comment `CARRIED-IN DEFERRALS` block (the
+  `ch06-slots.md` pattern), citing the source chapter/section. Write
+  the prose deferral and the scaffold TODO *together* so nothing
+  promised is dropped. Draft scaffolds stay out of `SUMMARY.md`
+  until the chapter is written; the HTML comments never render.
+  (Within-chapter "next increment" work — not yet deferred to a
+  *later* chapter — stays in the buildout plan, not these blocks.)

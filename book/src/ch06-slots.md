@@ -2,6 +2,50 @@
 
 # Slots
 
+<!-- ============================================================
+CARRIED-IN DEFERRALS → Step 5 (Slots).
+
+Every "deferred to Chapter 6 / Step 5" an earlier chapter wrote
+lands here as a checkbox. Settle or re-route each before this
+chapter is done. Convention (CLAUDE.md › Conventions): a prose
+deferral and its line here are written together, so nothing
+promised is dropped.
+
+[ ] Inverse slots — explicit slot vs upstream owl:inverseOf, per
+    relation. Detailed rationale in the block below.
+    (Ch 2 §scope; Ch 4 §"reading edges backward"; Ch 4 §surfaced)
+[ ] Relation typing — which of addressedBy / extractedInto /
+    consumedBy / hasInput / hasOutput / derivedFrom become real
+    slots vs a generic relation with a typed range.
+    (Ch 4 §"reading edges backward")
+[ ] Stored vs derived — which relations are materialized and which
+    the reasoner computes (e.g. a hypothesis's weight of evidence
+    from its support/contradict edges).
+    (Ch 4 §"stored versus derived")
+[ ] Cardinalities — per-slot multiplicities. (Ch 2 §scope)
+[ ] Claim-relation naming — rename supports/contradicts/refines to
+    CiTO's terms, or keep scimantic's and map with skos:closeMatch.
+    (Ch 5 §Next)
+[ ] Promotion wiring — the Claim→State bearing slot and the
+    EvidenceAssessment slot that confers an AcceptedState; whether
+    promotedFrom is a real slot or a derived transition.
+    (Ch 5 §"Evidence and Premise")
+[ ] tests — materialize the prospective-intent slot on
+    DesignOfExperiment (placement decided in Ch 5).
+    (Ch 5 §"Method and act")
+[ ] executes — which CCO relation it maps to. (Ch 5 §"Method and act")
+[ ] State attachment — how OpenState / AcceptedState /
+    RetractedState attach to the entity each qualifies and point
+    back to the act + agent that established them.
+    (Ch 5 §"Standing as state")
+[ ] Act participation — agent, time (a TemporalInterval, not a
+    createdAt instant), inputs, and outputs on Act. (Ch 5 §Anchoring)
+[ ] Uncertainty quality — whether scimantic fills CCO's gap under
+    BFO Quality, with URREF's guidance.
+    (Ch 3 §"the one place CCO leaves a gap")
+=============================================================
+-->
+
 <!--
 ================================================================
 Deferred design decision: bidirectional / inverse slots

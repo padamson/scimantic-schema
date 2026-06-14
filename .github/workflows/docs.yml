@@ -145,6 +145,13 @@ jobs:
         working-directory: book
         run: mdbook-listings install
 
+      - name: Verify frozen listings (mdbook-listings)
+        # Fail fast on frozen-snapshot hash drift or a broken
+        # {{#include}} / {{#callout}} before the longer book build.
+        # Mirrors the local prek/pre-commit hook (.pre-commit-config.yaml).
+        working-directory: book
+        run: mdbook-listings verify --book-root .
+
       - name: Build the book (mdbook)
         # Outputs to book/build/ per the [build] build-dir config.
         working-directory: book
