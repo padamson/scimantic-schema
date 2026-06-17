@@ -74,23 +74,53 @@ nine times.
 
 {{#diff scimantic-yaml-v7 scimantic-yaml-v8 context=5 caption="Per-act inputs and outputs"}}
 
-<!-- ============================================================
-BUILDOUT PLAN — ch07 facet clusters (working order; not yet prose).
-Mirrors ch06's cluster rhythm. Each advances the schema and freezes a
-new scimantic-yaml tag with a v(n)->v(n+1) diff.
+## Numeric bounds
 
-1. Per-act inputs and outputs — slot_usage on each Act subtype narrowing
-   hasInput/hasOutput from the Step-5 any_of union to what that act
-   actually consumes/produces. The chapter's central worked example.
-2. Numeric bounds — strength's interval and confidenceLevel in [0, 1]
-   (minimum_value / maximum_value), plus requiredness/defaults.
-3. Relational characteristics — irreflexive / asymmetric / symmetric on
-   the claim relations and the reified EvidentialRelation.
-4. Required and optional — the cardinality sweep: which slots a competency
-   question forces to be present, exactly-one, or many.
+Two slots carry numbers rather than references: `strength` (on
+`EvidentialRelation` and `EvidenceLine`) and `confidenceLevel` (on
+`UncertaintyModel`). Step 5 left both as unbounded floats, with the
+interval deferred to here. A `float` admits any real value, which is
+wrong for both: a strength of 4.2 or a confidence of -0.3 is
+meaningless. The `minimum_value` and `maximum_value` facets close that,
+pinning each to `[0, 1]`.
+
+`strength` is a magnitude, not a signed quantity. Direction already
+lives in `polarity` (supports, contradicts, refines), so a bearing that
+weakly contradicts is `polarity: contradicts` with a low `strength`,
+never a negative one. Weakness, then, needs no slot of its own: it is the
+low end of `[0, 1]`. The schema keeps the three senses of "weak" apart,
+each on its own slot. A weak bearing is low `strength`, weak evidence is
+low `Credibility`, and a shaky result is high `Uncertainty`.
+
+`confidenceLevel` is a reported confidence, so `[0, 1]` is the
+probability interval it lives on.
+
+These are value bounds, a different facet from cluster 1's range
+narrowing. There we restricted which classes a slot points at; here we
+restrict which numbers a value may take. The instinct is the same: say no
+more than the domain allows, applied now to the two kinds of value a slot
+can hold.
+
+{{#diff scimantic-yaml-v8 scimantic-yaml-v9 context=5 caption="Numeric bounds"}}
+
+<!-- ============================================================
+BUILDOUT PLAN — ch07 facet clusters. Each advances the schema and freezes
+a new scimantic-yaml tag with a v(n)->v(n+1) diff. Order is
+value -> count -> logic.
+
+[done] 1. Per-act inputs and outputs — slot_usage narrowing hasInput/
+   hasOutput per Act subtype. v7->v8.
+[done] 2. Numeric bounds — strength and confidenceLevel pinned to [0, 1]
+   (minimum_value / maximum_value). v8->v9.
+3. Required and optional — the cardinality sweep: which slots a competency
+   question forces present / exactly-one / many.
+4. Relational characteristics — irreflexive / asymmetric / symmetric on
+   the claim relations; the capstone, closing ch06's Claim->Claim
+   domain=range question. EvidentialRelation's subject!=object is a rule,
+   deferred to ch08 validation.
 
 Housekeeping: Ch 2 prose says "Chapter 6" for slot_usage; it is Step 6 /
-this chapter. Reconcile the Ch 2 wording when cluster 1 lands.
+this chapter. Reconcile the Ch 2 wording when the chapter lands.
 ============================================================
 -->
 

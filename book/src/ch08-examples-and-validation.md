@@ -43,6 +43,22 @@ Prerequisites the real-study dogfood (Appendix A) forces:
 [ ] LinkML → RDF projection — lower instance data to RDF via the
     class_uri/slot_uri grounding so the competency questions run as
     SPARQL (the CQ litmus above). (Ch 3 grounding enables it)
+
+Schema polish surfaced dogfooding the viz:
+[ ] Connect the BFO qualities to their bearers — Uncertainty and
+    Credibility ship from Step 5 grounded as BFO Quality but with no
+    slots, so they float free of the provenance graph (the ch07 viz
+    surfaced the island: UncertaintyModel → quantifies → Uncertainty,
+    but Uncertainty reaches no bearer; Credibility reaches nothing).
+    Add the BFO "inheres in" relation (obo:BFO_0000197, verify before
+    encoding): Uncertainty inheresIn → Result, Credibility inheresIn →
+    Evidence, threading UncertaintyModel → Uncertainty → Result and
+    Credibility → Evidence into the chain (mirrors State.qualifies).
+    Optionally also give each its establishing act (mirror
+    State.establishedBy: Credibility conferred by EvidenceAssessment,
+    Uncertainty derived by Analysis). Structural slot, not a facet, so
+    it lands as a polish freeze (a later v; clusters 3-4 advance the
+    chain first). (Surfaced 2026-06-17.)
 =============================================================
 -->
 

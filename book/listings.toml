@@ -47,3 +47,9 @@ tag = "scimantic-yaml-v8"
 source = "../schema/scimantic.yaml"
 frozen = "src/listings/scimantic-yaml-v8.yaml"
 sha256 = "8f83a163e25932cd1510354a6959a14e18a002c2cde7a75e8ecab94a2fd70691"
+
+[[listing]]
+tag = "scimantic-yaml-v9"
+source = "../schema/scimantic.yaml"
+frozen = "src/listings/scimantic-yaml-v9.yaml"
+sha256 = "9d40356d01c289c9b829aea3701a3c6a9a88376a1da4b632e2e9ad8d02fbdf6c"
