@@ -6,6 +6,10 @@
 - [Important Terms](ch04-important-terms.md)
 - [Classes and Hierarchy](ch05-classes-and-hierarchy.md)
 - [Slots](ch06-slots.md)
-- [Slot Usage and Facets]()
+- [Slot Usage and Facets](ch07-slot-usage-and-facets.md)
 - [Examples and Validation]()
 - [Publishing and Consumption]()
+
+# Appendix
+
+- [A — A Worked Study]()

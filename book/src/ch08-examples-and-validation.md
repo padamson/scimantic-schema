@@ -3,6 +3,19 @@
 # Examples and Validation
 
 <!-- ============================================================
+CHARTER (set 2026-06-16). ch08 is the dogfooding-driven polish +
+validation chapter. The worked example is a REAL published study,
+instantiated end-to-end in Appendix A as LinkML instance data. This
+chapter narrates what that dogfood surfaced — the schema refinements it
+forced, landing as new freezes (v9+), NOT retro-edits to earlier
+chapters' snapshots — and the validation: linkml-validate (structural
+conformance) + the competency-question litmus run as SPARQL over the
+RDF projection. The demand-driven method made explicit: Appendix A =
+the demand, this chapter = the polish it pulls.
+============================================================
+-->
+
+<!-- ============================================================
 CARRIED-IN DEFERRALS → Step 7 (instances + validation).
 
 Every "deferred to Step 7 / Chapter 8 / validation" an earlier
@@ -17,6 +30,19 @@ CLAUDE.md › Conventions.
 [ ] DAG constraint — enforce that the provenance graph is acyclic
     (the one shape-finding Ch 4 recorded). (Ch 4 §"questions that
     test shape")
+
+Prerequisites the real-study dogfood (Appendix A) forces:
+[ ] Identifiers — instances form a provenance DAG with SHARED
+    references (one act's output is another's input), so add an
+    identifier slot (identifier: true) so hasInput/hasOutput/hasPart
+    can point at a node by id. Currently zero identifier slots — this
+    blocks instance authoring; lands as a schema polish (new freeze).
+[ ] linkml-validate in CI — the structural proof that the study's
+    instance data conforms to the schema. External tool (not
+    panschema); wire into the docs/CI workflow.
+[ ] LinkML → RDF projection — lower instance data to RDF via the
+    class_uri/slot_uri grounding so the competency questions run as
+    SPARQL (the CQ litmus above). (Ch 3 grounding enables it)
 =============================================================
 -->
 
