@@ -73,6 +73,10 @@ Schema polish surfaced dogfooding the viz:
     question-in / conclusion-out, make Study is_a Act (inheriting those
     plus hasPart). A class-hierarchy change (Step 4), surfaced in ch07's
     cluster-4 discussion. (Surfaced 2026-06-17.)
+[ ] nature URREF grounding — UncertaintyModel.nature is a plain enum
+    (aleatory/epistemic); attaching a urref: meaning to its permissible
+    values awaits a resolved URREF namespace. Routed here when ch07
+    closed. (Ch 6 §"Enumerate what's closed"; Ch 3 §urref-namespace)
 =============================================================
 -->
 

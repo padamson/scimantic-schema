@@ -115,7 +115,7 @@ tracing each artifact back to the act that produced it and the
 agent who performed that act — is core to the scope; the specific
 implementation mechanics (which relations carry explicit inverse
 slots vs. derive from upper-ontology declarations, cardinalities,
-`slot_usage` refinements) are deferred to Chapter 6.
+`slot_usage` refinements) are deferred to Chapters 6 and 7.
 
 This list is a **sketch**, not a contract. It informs design;
 Chapter 8 will revisit each question and verify the ontology can
