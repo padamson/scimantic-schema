@@ -207,6 +207,14 @@ derivation as a *descriptive attribute* (URREF-style metadata) or as a
 inputs and agent). The question gives different answers depending on
 which the schema picks.
 
+```admonish info title="Jargon: aleatory and epistemic"
+Two kinds of uncertainty. *Aleatory* uncertainty is irreducible randomness
+in the thing itself: flip a fair coin and you cannot predict the next
+outcome no matter how much you know. *Epistemic* uncertainty is a gap in
+what you know, and it shrinks as you gather more data. The same measurement
+can carry both.
+```
+
 *"What conclusions derive from a given experimental result?"* (CQ 13)
 forces almost no new noun but presses a relation: `derivedFrom`
 (conclusion → result) must stay *consistent with* the act path behind
@@ -255,6 +263,13 @@ mutually consistent. CQ 15 also quietly assumes the provenance graph is
 a **DAG**: lineage is generally a converging tree, "the originating
 question" may be plural, and an act can never precede one that occurred
 later.
+
+```admonish info title="Jargon: DAG"
+A *directed acyclic graph* (DAG): nodes joined by one-way edges with no
+cycle, so following the arrows never returns you to where you started.
+Provenance forms one because lineage never loops: nothing can, even at a
+distance, derive from itself.
+```
 
 New terms: **TemporalRegion** (with the **instant** vs **interval**
 distinction, and **startTime** / **endTime** / **duration**); the

@@ -59,6 +59,14 @@ Schema polish surfaced dogfooding the viz:
     Uncertainty derived by Analysis). Structural slot, not a facet, so
     it lands as a polish freeze (a later v; clusters 3-4 advance the
     chain first). (Surfaced 2026-06-17.)
+[ ] Revisit UncertaintyModel granularity — family is an open string,
+    parameters a multivalued string. For provenance, family +
+    confidenceLevel + nature may suffice (the detailed stats are the
+    Result's content, not a provenance record's). When the real study
+    exercises a result-with-uncertainty, decide: drop or keep
+    parameters; range family over an external stats ontology (STATO)
+    vs leave it an open string. Don't model speculatively before the
+    study shows what's needed. (Surfaced 2026-06-17, with inheresIn.)
 =============================================================
 -->
 

@@ -59,7 +59,17 @@ where it emerges. An act that consumes an artifact can only run after the act
 that produced it. `ResultAssessment hasInput→Result` and `Analysis
 hasOutput→Result` together say, without ever stating an order, that assessment
 follows analysis. The nine narrowings induce a **partial order** on the acts:
-a happens-before read straight off the input and output types. We don't
+a happens-before read straight off the input and output types.
+
+```admonish info title="Jargon: partial order"
+The acts are *partially* ordered, not *totally* ordered. The input/output
+types fix the sequence between two acts only when one consumes what the
+other produced ("X *happens-before* Y"); any two acts not linked that way
+are unordered. A total order would put every act on a single line; a partial
+order keeps only the dependencies and leaves the rest free.
+```
+
+We don't
 hard-wire the textbook question→…→conclusion sequence, because real inquiry
 doesn't obey it. Exploratory work has no hypothesis, a `LiteratureSearch` can
 surface fresh questions, studies iterate and skip steps. scimantic records
@@ -103,6 +113,35 @@ can hold.
 
 {{#diff scimantic-yaml-v8 scimantic-yaml-v9 context=5 caption="Numeric bounds"}}
 
+## Required and optional
+
+The last facet axis is cardinality: how many values a slot must have. Most
+of the schema's slots are optional by default, so the sweep here is deciding
+which ones a record cannot do without.
+
+scimantic takes the lenient stance its PROV-O lineage suggests: an activity
+asserts what is known, so provenance metadata stays optional. `agent`,
+`performedAt`, and an act's inputs are left unconstrained, because real
+records often lack a known performer, time, or explicit input. The schema
+should capture a partial record, not reject it.
+
+What it does require is structural integrity: the fields without which an
+entity is not coherent. A reified relation needs its endpoints and
+direction, so `EvidentialRelation` requires `subject`, `object`, and
+`polarity`. An evidence line needs what it groups and what it bears on, so
+`EvidenceLine` requires `members` and `bearsOn`. A state needs the thing it
+qualifies, a study needs its parts, and an uncertainty model needs the
+quality it quantifies.
+
+The acts add one required slot apiece, on the output side. An act defined by
+what it produces must produce it: a `QuestionFormation` without a `Question`,
+or an `Analysis` without a `Result`, is incomplete in a way an act missing
+its agent is not. So each act whose identity is its product requires that
+output, narrowed in cluster 1 and now floored at one. Inputs stay optional,
+since an act can usually be reconstructed from its output alone.
+
+{{#diff scimantic-yaml-v9 scimantic-yaml-v10 context=9 caption="Required and optional"}}
+
 <!-- ============================================================
 BUILDOUT PLAN — ch07 facet clusters. Each advances the schema and freezes
 a new scimantic-yaml tag with a v(n)->v(n+1) diff. Order is
@@ -112,8 +151,8 @@ value -> count -> logic.
    hasOutput per Act subtype. v7->v8.
 [done] 2. Numeric bounds — strength and confidenceLevel pinned to [0, 1]
    (minimum_value / maximum_value). v8->v9.
-3. Required and optional — the cardinality sweep: which slots a competency
-   question forces present / exactly-one / many.
+[done] 3. Required and optional — required on structural-identity slots +
+   per-act defining outputs; lenient on metadata (PROV-O stance). v9->v10.
 4. Relational characteristics — irreflexive / asymmetric / symmetric on
    the claim relations; the capstone, closing ch06's Claim->Claim
    domain=range question. EvidentialRelation's subject!=object is a rule,

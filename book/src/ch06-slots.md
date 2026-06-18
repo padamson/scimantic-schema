@@ -97,6 +97,13 @@ mandatory filler. (N&M file cardinality under Step 6; scimantic decides it
 alongside the slot, since the question that motivates a slot usually fixes
 its multiplicity too.)
 
+```admonish info title="Jargon: cardinality"
+How many values a slot may hold. *Minimum* cardinality sets the floor
+(0 = optional, 1 = required); *maximum* cardinality sets the ceiling
+(1 = single-valued, unbounded = multivalued). "Exactly one" is minimum and
+maximum both fixed at 1.
+```
+
 ### Name for scimantic; map to the standard
 
 Several relations have an upstream analogue: the claim relations align
