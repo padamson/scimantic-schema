@@ -67,6 +67,12 @@ Schema polish surfaced dogfooding the viz:
     parameters; range family over an external stats ontology (STATO)
     vs leave it an open string. Don't model speculatively before the
     study shows what's needed. (Surfaced 2026-06-17, with inheresIn.)
+[ ] Study is_a Act? — Study is a sibling of Act (both subclass_of CCO
+    Planned Act), so it carries only hasPart, not agent / performedAt /
+    hasInput / hasOutput. If a study should have a PI, a timespan, and a
+    question-in / conclusion-out, make Study is_a Act (inheriting those
+    plus hasPart). A class-hierarchy change (Step 4), surfaced in ch07's
+    cluster-4 discussion. (Surfaced 2026-06-17.)
 =============================================================
 -->
 

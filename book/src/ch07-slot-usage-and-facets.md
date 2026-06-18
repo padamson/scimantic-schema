@@ -142,6 +142,78 @@ since an act can usually be reconstructed from its output alone.
 
 {{#diff scimantic-yaml-v9 scimantic-yaml-v10 context=9 caption="Required and optional"}}
 
+## Relational characteristics
+
+ch06 left a question open. The claim relations are `Claim`-to-`Claim`:
+`supports`, `contradicts`, and `refines` take `Claim` as both domain and
+range. That shape raised a question domain and range alone cannot answer:
+may a claim bear on itself, and does a bearing run both ways? The answers
+are not facets of a value or a count. They are *characteristics* of the
+relation, which LinkML carries as boolean slot metaslots and lowers to OWL
+property axioms a reasoner can enforce.
+
+```admonish info title="Jargon: property characteristics"
+Logical features of a relation, independent of any single pair. A relation
+is *irreflexive* if nothing relates to itself; *symmetric* if A-to-B always
+implies B-to-A; *asymmetric* if A-to-B forbids B-to-A (which makes it
+irreflexive too); *transitive* if A-to-B and B-to-C imply A-to-C. Each
+lowers to an OWL axiom.
+```
+
+All three claim relations are **irreflexive**: no claim bears on itself. A
+claim that supports, contradicts, or refines itself is a small circularity
+the reasoner can now reject, and it is the direct answer to ch06's
+domain-equals-range question. The relation runs among claims, never from a
+claim back to itself.
+
+The three then part on direction. `refines` is **asymmetric**: if one claim
+refines another, the second does not refine the first, since refinement
+sharpens or extends what came before and the reverse cannot also hold.
+(Asymmetry already implies irreflexivity, so the two travel together.)
+
+`supports` and `contradicts` are directional but not one-way, so neither
+symmetric nor asymmetric fits. Evidence supporting a hypothesis is not the
+hypothesis supporting the evidence, yet two claims can support each other in
+a coherent pair. Contradiction is subtler: logical incompatibility is
+symmetric, but scimantic's `contradicts` is the evidential `cito:disputes`,
+and disputation flows from the disputing claim to the disputed one. A null
+result contradicts the hypothesis it tested; the hypothesis does not dispute
+the result. Two studies with opposite findings, though, contradict each
+other. So both relations stay where they began, irreflexive and nothing more.
+
+The empty symmetric and transitive columns are deliberate, not an oversight.
+The transitive relations in provenance are real, but they are *lineage* and
+*order*, and a slot for each is the wrong place to keep them. scimantic
+stores the atomic edges, `hasInput` and `hasOutput` and the act chain, and
+lets the transitive closures fall out of SPARQL property paths, the same
+store-the-edge-derive-the-aggregate call ch06 made. A symmetric
+`corroborates` would be derivable too, from two claims supporting a common
+target. Transitivity and symmetry are present in the graph; they are
+queried, not declared.
+
+One slot is the exception, and it earns the axiom. `Study.hasPart` maps to
+BFO's *has occurrent part*, which BFO defines as transitive, so a study's
+parts' parts are its parts. Because scimantic grounds in BFO by URI rather
+than importing it, that transitivity is not inherited, so the schema
+declares `transitive: true` to make BFO's own semantics explicit and to be
+ready for composite acts with sub-acts.
+
+```admonish info title="Jargon: mereology"
+The logic of parts and wholes. A *mereological* relation such as `hasPart`
+is characteristically transitive: a part of a part is a part of the whole.
+BFO's *has occurrent part* is the version for processes.
+```
+
+That leaves `refines` and a tempting fourth characteristic. Refinement reads
+transitively, a refinement of a refinement being a refinement, and declaring
+it would let a reasoner hand back the whole ancestry. But OWL 2 DL forbids a
+property from being both transitive and asymmetric or irreflexive, the
+restriction that keeps reasoning decidable. Transitivity would cost the
+one-way and no-self guarantees, and the ancestry it would infer is already a
+`refines+` path away. Asymmetry wins; transitivity stays off.
+
+{{#diff scimantic-yaml-v10 scimantic-yaml-v11 context=4 caption="Relational characteristics"}}
+
 <!-- ============================================================
 BUILDOUT PLAN — ch07 facet clusters. Each advances the schema and freezes
 a new scimantic-yaml tag with a v(n)->v(n+1) diff. Order is
@@ -153,10 +225,10 @@ value -> count -> logic.
    (minimum_value / maximum_value). v8->v9.
 [done] 3. Required and optional — required on structural-identity slots +
    per-act defining outputs; lenient on metadata (PROV-O stance). v9->v10.
-4. Relational characteristics — irreflexive / asymmetric / symmetric on
-   the claim relations; the capstone, closing ch06's Claim->Claim
-   domain=range question. EvidentialRelation's subject!=object is a rule,
-   deferred to ch08 validation.
+[done] 4. Relational characteristics — irreflexive on the claim relations,
+   asymmetric on refines, transitive on hasPart; symmetric/transitive
+   otherwise derived not stored. v10->v11. EvidentialRelation's
+   subject!=object is a rule, deferred to ch08 validation.
 
 Housekeeping: Ch 2 prose says "Chapter 6" for slot_usage; it is Step 6 /
 this chapter. Reconcile the Ch 2 wording when the chapter lands.
