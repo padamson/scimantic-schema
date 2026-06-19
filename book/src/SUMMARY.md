@@ -7,7 +7,7 @@
 - [Classes and Hierarchy](ch05-classes-and-hierarchy.md)
 - [Slots](ch06-slots.md)
 - [Slot Usage and Facets](ch07-slot-usage-and-facets.md)
-- [Examples and Validation]()
+- [Refinement and Validation](ch08-refinement-and-validation.md)
 - [Publishing and Consumption]()
 
 # Appendix
