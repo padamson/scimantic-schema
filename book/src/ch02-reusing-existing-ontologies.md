@@ -19,7 +19,7 @@ already exist and start developing the ontology from scratch.
 That last sentence is where scimantic parts ways with the guide. N&M
 set reuse aside for pedagogy. They build their wine ontology from scratch because
 it is easier to *teach* that way. scimantic makes the opposite choice on
-purpose: the entire motivation for the v0.3.0 rebuild (Chapter 1) was
+purpose: the entire motivation for the v0.3.0 rebuild (the Introduction) was
 that v0.2.0 *retrofitted* an upper-ontology grounding after the fact,
 and the fix is to **start from reused foundations** rather than bolt
 them on later. So this chapter is load-bearing in a way N&M's Step 2
@@ -111,11 +111,11 @@ CUBRC *[Overview of the Common Core
 Ontologies](https://www.nist.gov/document/nist-ai-rfi-cubrcinc004pdf)*
 (Rudnicki, 2019).
 
-This is the grounding ch01 promised and the decision ch02 deferred
+This is the grounding the Introduction promised and the decision ch01 deferred
 here: *"should `Question` subclass `cco:DirectiveInformationContentEntity`
 or `cco:DescriptiveInformationContentEntity`?"* is now a
 **well-posed** question, because both candidate parents exist in a
-vocabulary we've committed to reuse. Answering it is Chapter 5's job;
+vocabulary we've committed to reuse. Answering it is Chapter 4's job;
 making it answerable is this chapter's.
 
 ## Provenance without PROV-O
@@ -124,7 +124,7 @@ One reuse decision runs the other way: not reusing PROV-O at all. It
 needs justifying, because on the surface it looks counterintuitive.
 
 scimantic's domain *is* provenance. The competency questions in
-[Chapter 2](ch02-domain-and-scope.md) ("what act produced this
+[Chapter 1](ch01-domain-and-scope.md) ("what act produced this
 dataset?", "who performed it, and when?", "trace this conclusion back
 to its originating question") are textbook provenance queries. The
 [W3C **PROV-O** Recommendation](https://www.w3.org/TR/prov-o/) is the
@@ -138,7 +138,7 @@ walk back. PROV-O is loose by design: `prov:Entity` spans both
 continuants and occurrents, which helps interchange but breaks down
 under a rigorous upper ontology. Going from v0.1.0 to v0.2.0 meant
 translating PROV relations into BFO/CCO process-participant relations
-*after the fact*, the indirect path ch01 calls out; re-importing
+*after the fact*, the indirect path the Introduction calls out; re-importing
 PROV-O as a grounding now would repeat it.
 
 The bridge scimantic needs **already exists as an external,
@@ -153,7 +153,7 @@ the BFO-aligned standard for relations like *part of* and *participates
 in*, where much of PROV's relational vocabulary lands). The mappings
 ship as three standalone files: `PROV-BFO`, `PROV-CCO`, and `PROV-RO`.
 Because scimantic grounds in CCO, it inherits that bridge
-**transitively**. This is what ch02 meant by "PROV-O Agent
+**transitively**. This is what ch01 meant by "PROV-O Agent
 (transitively, via CCO/BFO mappings)."
 
 With that alignment in hand, declaring PROV mappings in scimantic
@@ -173,14 +173,14 @@ rather than by importing PROV-O itself.
 ## Specialized vocabularies
 
 Beyond the foundation, scimantic reuses five narrower vocabularies,
-each covering a concern ch02 explicitly declined to model itself.
+each covering a concern ch01 explicitly declined to model itself.
 None are foundational (they attach to specific classes that arrive in
 later chapters), but committing to them now keeps the prefix block an
 honest manifest.
 
 - **`dcterms`** ([Dublin Core Terms](http://purl.org/dc/terms/)) —
   general metadata (titles, dates, creators, free-form `citation`).
-  ch02 sends typed bibliographic structure downstream to DC/CSL/BibTeX
+  ch01 sends typed bibliographic structure downstream to DC/CSL/BibTeX
   and institutional/funding context to dcterms; this is that landing
   pad, and an uncontroversial one to reuse.
 - **`oa`** ([W3C Web Annotation Data
@@ -192,7 +192,7 @@ honest manifest.
   real tool support.
 - **`dcat`** ([Data Catalog
   Vocabulary](https://www.w3.org/TR/vocab-dcat-3/)) — dataset
-  description. ch02 draws a firm line: `Dataset` is a *process-artifact
+  description. ch01 draws a firm line: `Dataset` is a *process-artifact
   handle*, and the internal structure of the data is DCAT's job (or a
   discipline-specific schema's), not scimantic's. The `dcat:` prefix is
   how that handle connects to the catalog layer.
@@ -206,7 +206,7 @@ honest manifest.
 - **`urref`** ([Uncertainty Representation and Reasoning Evaluation
   Framework](https://ieeexplore.ieee.org/document/6290584)) — the
   uncertainty layer (Costa et al., *Towards unbiased evaluation of
-  uncertainty reasoning: the URREF ontology*, Fusion 2012). ch02 lists
+  uncertainty reasoning: the URREF ontology*, Fusion 2012). ch01 lists
   "URREF-derived qualities on relevant artifacts" as in-scope, so the
   uncertainty model of an Evidence or Result has a vocabulary to
   attach to. It is also the one reuse target without a stable,
@@ -225,7 +225,7 @@ is **original**: `Question`, `Hypothesis`, `Evidence`, `Premise`,
 BFO, CCO, or any vocabulary above; supplying them is why scimantic
 exists.
 
-The division of labor is the consistent pattern from ch02: **reuse
+The division of labor is the consistent pattern from ch01: **reuse
 the scaffolding, invent the discipline.** BFO supplies the categories
 of being; CCO supplies the generic shapes of information and action;
 the specialized vocabularies cover annotation, datasets, citation,
@@ -234,7 +234,7 @@ structure of research itself*, built by subclassing the reused
 categories under original names. Those classes live under the
 `scimantic:` prefix. The one place CCO leaves a gap is an uncertainty
 quality; whether scimantic fills it under BFO Quality is a candidate
-for Chapter 6 to take up, with URREF's guidance.
+for Chapter 5 to take up, with URREF's guidance.
 
 ## The reuse decision, at a glance
 
@@ -277,7 +277,7 @@ Instead, scimantic reuses external ontologies the way LinkML intends:
   without claiming identity.
 - **`prefixes`** declare the namespaces those IRIs live in. This is
   the only piece that lands in *this* chapter; the `class_uri`s that
-  consume the prefixes arrive in Chapter 5.
+  consume the prefixes arrive in Chapter 4.
 
 The upshot: reusing BFO and CCO costs scimantic nothing at the
 `imports:` level. `imports:` stays at just `linkml:types`. Reuse is
@@ -324,7 +324,7 @@ live code.
 ## Next
 
 The foundations are chosen and named; nothing is yet classified
-against them. Chapter 4 takes N&M Step 3, enumerating the important
-terms of the domain to produce the candidate vocabulary that Chapter 5
+against them. Chapter 3 takes N&M Step 3, enumerating the important
+terms of the domain to produce the candidate vocabulary that Chapter 4
 will then arrange into a class hierarchy beneath the BFO and CCO
 categories committed here.

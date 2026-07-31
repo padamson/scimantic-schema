@@ -15,15 +15,15 @@ the more salient concepts first and then generalizes and specializes
 them appropriately.
 ```
 
-ch04 produced the salient concepts bottom-up, by reading the competency
+ch03 produced the salient concepts bottom-up, by reading the competency
 questions. This chapter places them top-down, under the BFO and CCO
-categories [Chapter 3](ch03-reusing-existing-ontologies.md) committed
+categories [Chapter 2](ch02-reusing-existing-ontologies.md) committed
 to. That is N&M's *combination* approach, and it is where the schema
-starts to grow: ch04 was nearly free of code, but Step 4 turns the
+starts to grow: ch03 was nearly free of code, but Step 4 turns the
 vocabulary into classes.
 
-The work of the chapter is the ledger ch04 left
-[unsettled](ch04-important-terms.md#what-the-list-leaves-unsettled).
+The work of the chapter is the ledger ch03 left
+[unsettled](ch03-important-terms.md#what-the-list-leaves-unsettled).
 Those decisions are not independent, so the chapter takes them in
 dependency order: first the scaffold under BFO/CCO, then the **claim
 spine** (the core of the method), then **method and act**, then the
@@ -31,12 +31,12 @@ spine** (the core of the method), then **method and act**, then the
 depends on all of them. Two decisions are slot-shaped rather than
 hierarchy-shaped (which named relations become real slots, and which
 are stored versus derived); those belong to Step 5 and wait for
-Chapter 6.
+Chapter 5.
 
 ## Anchoring to BFO and CCO
 
 Every scimantic class ultimately subclasses one of the foundational
-kinds Chapter 3 committed to. Placing the harvest under them is mostly
+kinds Chapter 2 committed to. Placing the harvest under them is mostly
 mechanical:
 
 - **Artifacts** are information content entities (CCO Information Content
@@ -101,7 +101,7 @@ content — leaving the contested decisions the rest of the chapter settles:
 ## The claim spine
 
 The core of the method is the chain from a question, through evidence
-and premises, to a hypothesis and a conclusion. Three of ch04's open
+and premises, to a hypothesis and a conclusion. Three of ch03's open
 decisions shape it, and they lock together: how standing is modeled,
 what distinguishes evidence from a premise, and whether a hypothesis is
 mandatory. They are taken in that order because each constrains the
@@ -142,7 +142,7 @@ CCO Stasis {{#callout stasis}}:
 ### Evidence and Premise: one claim, two standings
 
 When assessed evidence becomes a premise, is that a new class, a status
-on the old one, or a derivation? ch04 settled the framing: evidence and
+on the old one, or a derivation? ch03 settled the framing: evidence and
 premise are the same claim at two epistemic stages, not one claim
 derived from another. With standing now modeled as state, the
 resolution is direct.
@@ -164,7 +164,7 @@ comes to bear, and the `EvidenceAssessment` that confers it — but the
 promotion *between* them is relational: a claim bearing a state, an act
 conferring it. Those are slots, so the wiring that makes the promotion
 queryable, and `promotedFrom` a transition rather than a phrase, is
-Step 5 work that lands in Chapter 6. The listings here show the
+Step 5 work that lands in Chapter 5. The listings here show the
 participating classes; the slots that carry a promotion come with the
 rest of the slot work. This is also why the three pieces sit in three
 different listings below — the claim layer, the states, and the acts —
@@ -183,10 +183,10 @@ one node; its acceptance and its use are recorded without cloning it.
 
 Does the chain require a hypothesis? The seeded vocabulary runs Question
 → Hypothesis → Evidence → Conclusion, which reads as though every
-conclusion descends from a hypothesis. [Chapter 2's
-scope](ch02-domain-and-scope.md#what-domain-does-scimantic-cover) says
+conclusion descends from a hypothesis. [Chapter 1's
+scope](ch01-domain-and-scope.md#what-domain-does-scimantic-cover) says
 otherwise: it admits a literature-only meta-analysis, and the lesson
-scimantic took from EXPO — the experiment ontology Chapter 4 declined to
+scimantic took from EXPO — the experiment ontology Chapter 3 declined to
 reuse, because it builds on SUMO rather than the BFO/CCO base — is that
 some inquiry is exploratory, with no prior hypothesis to test. Forcing a `Hypothesis`
 node into every lineage would mismodel exactly the inquiry the domain
@@ -225,7 +225,7 @@ With the spine fixed, the next cluster turns to method and act.
 
 Three questions (CQ 8, 9, and 10) turn on a single decision: is an
 experimental method a reusable template, or a thing made fresh for each
-study? ch04 named this the chapter's biggest single tension. It resolves
+study? ch03 named this the chapter's biggest single tension. It resolves
 the way Evidence and Premise did, by dissolving the dichotomy.
 
 A method is a **plan specification**: a Prescriptive information
@@ -252,7 +252,7 @@ back along `tests` to the design act, forward to the method it produced.
 The method's type-level *capability* (the kind of hypothesis it can
 test) is a separate affordance no question demands, so it waits.
 
-Placing `tests` on the design act keeps it the distinct verb ch04
+Placing `tests` on the design act keeps it the distinct verb ch03
 insisted on. `tests` is prospective intent, carried by a design act
 before the evidence is in; `supports` and `contradicts` are
 retrospective verdicts, carried by the evidence after. They never
@@ -267,7 +267,7 @@ gains one when an assessment accepts it.
 
 Which CCO relation `executes` should map to, rather than a freshly
 minted slot, is a Step 5 question that waits with the other slot
-decisions for Chapter 6.
+decisions for Chapter 5.
 
 Both halves are in the schema now. The `Method` plan specifications,
 grounded in CCO's Prescriptive ICE {{#callout prescriptive}}, with
@@ -358,19 +358,19 @@ family and the fitted parameters are content about the uncertainty, not
 the uncertainty itself. So scimantic models an **`UncertaintyModel`**, a
 Descriptive ICE that quantifies the result's uncertainty quality, rather
 than loading structure onto a bare quality. The quality stays a BFO
-Quality, as Chapter 3 grounded it; the model is the ICE that describes
+Quality, as Chapter 2 grounded it; the model is the ICE that describes
 it.
 
-Chapter 3 committed to URREF in principle for exactly this: the model's
+Chapter 2 committed to URREF in principle for exactly this: the model's
 **nature** facet, aleatory versus epistemic, is URREF's distinction. But
 nothing binds in this chapter. `nature` is itself a Step-5 slot (Chapter
-6), and URREF's namespace is still the provisional placeholder Chapter 3
+6), and URREF's namespace is still the provisional placeholder Chapter 2
 flagged — so the `UncertaintyModel` carries no `urref:` mapping here.
 scimantic adopts the distinction now and defers its encoding — a `urref:`
-mapping, or a plain enum if URREF's IRIs never settle — to Chapter 6. And
+mapping, or a plain enum if URREF's IRIs never settle — to Chapter 5. And
 it would be a *mapping* target, not a grounding: scimantic stays grounded
 in BFO/CCO and points out to URREF the way the claim relations point to
-CiTO, on the deferred footing Chapter 3 set.
+CiTO, on the deferred footing Chapter 2 set.
 
 CQ 12's second half, *how was it derived*, is a relationship the
 reification policy sends to an act. By what statistical method were the
@@ -400,7 +400,7 @@ higher-level layer, and it is the last cluster.
 
 The last cluster asks whether anything sits *above* the individual
 artifacts, or whether the flatter, artifact-by-artifact vocabulary is
-enough. ch04 surfaced three candidates from the *neighbors* questions.
+enough. ch03 surfaced three candidates from the *neighbors* questions.
 One — the `Claim` superclass — the spine already settled and the schema
 already has: the neighbors question (*given any claim, hypothesis,
 premise, or conclusion, what supports and what challenges it?*) only
@@ -416,7 +416,7 @@ pieces of evidence under one strength, asserting their joint bearing on a
 claim. This is the closest
 scimantic comes to an off-the-shelf model. SEPIO names an *evidence
 line* for exactly this, and Micropublications reifies evidence the same
-way; both become mapping targets on the deferred footing Chapter 3 set
+way; both become mapping targets on the deferred footing Chapter 2 set
 for SEPIO, citing the pattern and binding the IRIs once they settle.
 
 **A `Study`.** The neighbors ask *which acts and artifacts belong to the
@@ -447,10 +447,10 @@ In the schema, the higher-level layer adds `EvidenceLine`
 ## Next
 
 Step 4 is settled. Every term has a class, and every class a place under
-BFO and CCO. The decisions ch04 left open have answers, the forced
+BFO and CCO. The decisions ch03 left open have answers, the forced
 placements are made, and the higher-level layer is in.
 
-What remains is slot work, and it is Step 5. Chapter 6 settles three
+What remains is slot work, and it is Step 5. Chapter 5 settles three
 questions this chapter left to it:
 
 - which of the named relations become real slots, and which are a

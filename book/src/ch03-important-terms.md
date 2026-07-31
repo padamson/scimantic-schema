@@ -21,17 +21,17 @@ hierarchy, is later work (Chapters 5 and 6). This chapter only gathers
 the vocabulary.
 
 That also means it is nearly free of code. Harvesting terms changes
-nothing on its own, and the schema is almost as Chapter 3 left it; the
+nothing on its own, and the schema is almost as Chapter 2 left it; the
 one exception is the second pass's reuse step, which commits a single
 new prefix, `cito:` (its diff appears below). Otherwise the output of
-this step is the list itself, plus what ch02 anticipated: harvesting
+this step is the list itself, plus what ch01 anticipated: harvesting
 terms surfaces *new competency questions*, which we let happen and
 record.
 
 ## How the competency questions drive the vocabulary
 
 N&M's method is that the [competency questions from
-Chapter 2](ch02-domain-and-scope.md#what-questions-should-the-ontology-answer)
+Chapter 1](ch01-domain-and-scope.md#what-questions-should-the-ontology-answer)
 — the sketch of questions a scimantic knowledge base should be able to
 answer — tell you which terms you need: a knowledge base can answer a
 question only if its vocabulary names the things the question asks
@@ -43,7 +43,7 @@ plus the ones it quietly presupposes.
 
 What follows walks all fifteen questions in clusters, harvesting terms
 as it goes. The harvest has three moves: it **carries** the
-terms ch02/ch03 and v0.1/v0.2 already settled, it adds the ones a
+terms ch01/ch02 and v0.1/v0.2 already settled, it adds the ones a
 question **surfaces** (marked *(new)*), and it **reconsiders** the v0.2
 terms no question demands. A ground-up rebuild should prune as well as
 accrete, so the terms the questions retire are collected at the end,
@@ -94,7 +94,7 @@ queryable, so it can return only the accepted evidence; and it needs
 the link from accepted evidence to the **Premise** it became. That
 link is not generic `derivedFrom`: Evidence and Premise are the *same
 claim* at two epistemic stages, not one claim derived from another.
-This is the Evidence/Premise overlap ch04 flagged earlier made
+This is the Evidence/Premise overlap ch03 flagged earlier made
 concrete: CQ 4 is the query the eventual modeling choice (two classes,
 or one class with a status) has to serve, and CQ 5 then requires that a
 premise be a node you can traverse *from*.
@@ -163,7 +163,7 @@ that makes it actual. A **plan specification** such as a method is one
 such continuant; an act **realizes** it by carrying it out. The same
 machinery covers a BFO **role**: a potential something has by virtue of
 its context, realized when it acts in that role. scimantic leans on this
-twice: an experiment realizes a method, and (in Chapter 5) a hypothesis
+twice: an experiment realizes a method, and (in Chapter 4) a hypothesis
 formation realizes a claim's *premise* role.
 ```
 
@@ -183,7 +183,7 @@ ExperimentalMethod a reusable template or a per-study instance?** CQ 9's
 many-to-many "executed by" and CQ 10's "any act applies a method" both
 argue for a reusable template plus a general `Method`, which in turn
 argues that CQ 8's `tests` belongs on the *design act*, not the method.
-Three questions, one decision — deferred to Chapter 5.
+Three questions, one decision — deferred to Chapter 4.
 
 New terms: **tests** (design/method → hypothesis, prospective);
 **executes** (act → method); **Act** (generic superclass); **Method**
@@ -200,7 +200,7 @@ derived?"* (CQ 12) is the strongest pull toward promoting **uncertainty
 from a slot to a structured class**. The word "model" means uncertainty
 is not a scalar: it carries a model family (Gaussian, bootstrap,
 posterior), its **parameters** and **confidence level**, and a
-**nature** (aleatory or epistemic, the URREF distinction ch03
+**nature** (aleatory or epistemic, the URREF distinction ch02
 committed to). And "how was it derived" straddles two readings —
 derivation as a *descriptive attribute* (URREF-style metadata) or as a
 *deriving act* (an error-propagation or calibration step with its own
@@ -241,7 +241,7 @@ below).
 *"Who (which Agent) performed a given act, and when?"* (CQ 14) is the
 question that promotes **time** from background grounding to a named
 term. The "who" half reuses `hasAgent`. The "when" half is where the
-precision lives: acts are occurrents that *unfold in* time (ch03's
+precision lives: acts are occurrents that *unfold in* time (ch02's
 continuant/occurrent backbone), so an act's "when" is a temporal
 *region* — an interval — not merely a creation instant. The starting
 vocabulary only had `createdAt`, which silently asserts every act is
@@ -282,7 +282,7 @@ an acyclicity assumption on the whole graph.
 
 ## The vocabulary, enlarged
 
-Collecting the harvest. Terms carried from ch02/ch03 are plain; terms
+Collecting the harvest. Terms carried from ch01/ch02 are plain; terms
 **surfaced by reading the questions closely** are marked *(new)*. The
 grouping is for reading only — it is not the class hierarchy, and a
 term's group does not decide class-versus-slot.
@@ -327,7 +327,7 @@ term's group does not decide class-versus-slot.
   execution **fidelity**/deviation, per-execution **parameter
   bindings**, result **origin/kind**, lineage **step order**
 
-**States** *(the thin kind of ch04, now populated)*
+**States** *(the thin kind of ch03, now populated)*
 
 - a question **open** *(new)*
 - a claim **accepted** / standing as a premise *(new)*
@@ -362,15 +362,15 @@ term's group does not decide class-versus-slot.
 
 ## A second pass: the new questions loop back through Steps 2 and 3
 
-ch02 said the competency-question list was "a sketch, not a contract"
+ch01 said the competency-question list was "a sketch, not a contract"
 and predicted that later chapters "will likely surface gaps that
 motivate new questions, and that's not failure — it's [Rule
-2](ch02-domain-and-scope.md#on-iteration) made operational." Reading
+2](ch01-domain-and-scope.md#on-iteration) made operational." Reading
 the original fifteen closely did exactly that: it raised about forty
 more. Rather than list them and defer, we do what Rule 2 asks and loop
 back, running this new batch through the steps already taken — reuse
 (Step 2) and term-harvesting (Step 3), the same passes the originals
-went through. The hierarchy (Step 4) is still Chapter 5; these
+went through. The hierarchy (Step 4) is still Chapter 4; these
 questions feed it.
 
 The ones that earn a place are the *inverses*, the *gaps*, the
@@ -410,10 +410,10 @@ the original fifteen imply but never state:
 
 scimantic is not the first schema to model scientific claims, evidence,
 and provenance, and several of the new questions ask for things the
-neighbors already have. Running Chapter 3's "consider reuse" pass
+neighbors already have. Running Chapter 2's "consider reuse" pass
 again, now aimed at the new questions' terms, both validates the
 existing vocabulary and turns up candidate sources — to adopt now, or
-defer the way Chapter 3 deferred URREF. A research pass over the
+defer the way Chapter 2 deferred URREF. A research pass over the
 neighbors sorted them into four buckets.
 
 **Where scimantic aligns.** Its provenance relations map cleanly onto
@@ -471,7 +471,7 @@ binding to when the classes and slots land:
   Content Entity staying the primary grounding: interoperability without
   a second ancestry claim.
 - [RO](https://oborel.github.io/), the OBO Relations Ontology already
-  named in Chapter 3's PROV alignment, supplies `has input` / `has
+  named in Chapter 2's PROV alignment, supplies `has input` / `has
   output`; scimantic's input and output slots map to it for OBO-wide
   interoperability, with CCO and BFO relations primary.
 
@@ -505,7 +505,7 @@ or Premise. SWAN's IRIs are dead, its Google Code home gone, and its
 ideas survive in Micropublications. EXPO is grounded in SUMO, a rival
 upper ontology that would clash with the BFO/CCO base; its one portable
 lesson — that some inquiry is exploratory, with no prior hypothesis — is
-a question for Chapter 5 (is `Hypothesis` mandatory in the chain?). All
+a question for Chapter 4 (is `Hypothesis` mandatory in the chain?). All
 three are prior art, nothing to import.
 
 ### Step 3 again — the terms they add
@@ -518,7 +518,7 @@ rather than name new things. Two clusters are the exception.
 **Inverses** force no new nouns. "Which searches addressed a question,"
 "what evidence came from an annotation," "which analyses consumed a
 dataset" each read an existing edge backward. What they force is a
-Chapter 6 decision, not a Step 3 term: whether each inverse
+Chapter 5 decision, not a Step 3 term: whether each inverse
 (`addressedBy`, `extractedInto`, `consumedBy`, and the rest) is a
 stored slot or derived from its forward relation by the reasoner. The
 first pass already named one such inverse, `producedBy`, for the same
@@ -551,14 +551,14 @@ forces a **StatisticalMethod**, the act-or-method that produces the
 uncertainty quality the first pass named but left unsourced. "What a
 method is *capable* of testing versus what it *was designed* to test"
 sharpens `tests` into a capability-versus-intent distinction, a
-Chapter 5 refinement rather than a new term.
+Chapter 4 refinement rather than a new term.
 
 **Integrity and impact** name nothing. "Is a conclusion's lineage
 complete and acyclic," "do two conclusions share an ancestor," "if a
 premise is retracted, which conclusions break" ask the graph to be
 *well-formed* and to support *impact analysis*. They are the first
 questions that test the vocabulary's shape rather than its contents,
-which makes them Step 7 (validation, Chapter 8) work more than Step 3.
+which makes them Step 7 (validation, Chapter 7) work more than Step 3.
 The one finding to record is that the provenance graph must be a DAG,
 which the first pass already surfaced from CQ 15.
 
@@ -591,7 +591,7 @@ additions are:
 As with the first pass, this stops at naming. Whether a `Claim`
 superclass, an evidence line, or a study earns a place in the
 hierarchy, and whether the inverses are stored slots or derived, is
-Step 4 and Step 5 work, for Chapters 5 and 6. Chapter 8 will revisit
+Step 4 and Step 5 work, for Chapters 5 and 6. Chapter 7 will revisit
 the whole question set, original and surfaced, as the validation litmus
 test.
 
@@ -611,7 +611,7 @@ from v0.2.
   premise still accepted, or *retracted*?") come closest, but they ask
   for a *claim's* standing, which the *States* kind (grounded in CCO
   Stasis) answers, not an *act's* lifecycle enum. A status enum and a
-  Stasis state compete; choosing between them is a Chapter 5 decision,
+  Stasis state compete; choosing between them is a Chapter 4 decision,
   but the question set does not require the v0.2 enum.
 - **`Ambiguity`, `Vagueness`, `Incompleteness`, `Aleatory`.** v0.2's
   four fine-grained uncertainty natures. Both CQ 12 and the second
@@ -620,12 +620,12 @@ from v0.2.
   finer grain.
 - **The reuse mixins `Nanopublication`, `DCATDataset`,
   `UncertaintySubject`, `URREFEvidence`.** v0.2 reused nanopublication,
-  DCAT, and URREF by mixing in wrapper classes. Chapter 3 reuses them by
+  DCAT, and URREF by mixing in wrapper classes. Chapter 2 reuses them by
   URI through the prefix manifest instead, so the mixin classes are
   superseded rather than dropped for cause.
 - **The BFO/CCO wrapper classes** (`BFOEntity`,
   `InformationContentEntity`, `Act`, and the rest). v0.2's thin classes
-  carried upper-ontology IRIs; Chapter 3's grounding by `class_uri`
+  carried upper-ontology IRIs; Chapter 2's grounding by `class_uri`
   makes them unnecessary. A mechanism change, recorded here for
   completeness.
 
@@ -638,7 +638,7 @@ and `UncertaintyDerivation` is a v0.2 class, not a new one.
 The point of the list is to be comprehensive, not resolved. Most of
 what two passes of close reading sharpened are genuine open choices,
 left open on purpose for Chapters 5 and 6. Two are not choices at all:
-the questions force them, and Chapter 5 only has to place them, so they
+the questions force them, and Chapter 4 only has to place them, so they
 are set apart at the end. And the reuse *bind-later* calls from the
 Step 2 passes belong on the same ledger.
 
@@ -658,14 +658,14 @@ Step 2 passes belong on the same ledger.
   `promotedFrom`, `synthesizedFrom`, `executes`, `consumes`,
   `producedBy`) that is semantically a specialization of the generic
   `hasInput`/`hasOutput`/`derivedFrom`. Which become real slots and
-  which are generic-relation-plus-typed-range is a Chapter 6 question.
+  which are generic-relation-plus-typed-range is a Chapter 5 question.
 - **Stored versus derived relations.** A separate axis from the typing
   above: some edges may be *computed* rather than stored. `competesWith`
   can be asserted or derived from two hypotheses sharing an `addresses`
   question; the inverses (`addressedBy`, `consumedBy`, `extractedInto`,
   …) can be stored slots or reasoner-derived from their forward
   relation; and a hypothesis's weight of evidence is computed from its
-  support and contradict edges. Which are materialized is a Chapter 6
+  support and contradict edges. Which are materialized is a Chapter 5
   call.
 - **To reify or not.** Support, derivation, and evidence-lines can stay
   as plain edges or become nodes that carry their own provenance. The
@@ -674,30 +674,30 @@ Step 2 passes belong on the same ledger.
 - **The higher-level layer.** Whether to add the candidates the second
   pass surfaced — a `Claim` superclass, evidence lines, a `Study`
   container, an explicit statistical-derivation method — or keep the
-  flatter, artifact-by-artifact vocabulary. Each is a Chapter 5 call.
+  flatter, artifact-by-artifact vocabulary. Each is a Chapter 4 call.
 - **Is `Hypothesis` mandatory in the chain?** EXPO's portable lesson
   (Step 2's decline) was that some inquiry is exploratory, with no prior
   hypothesis. Whether the question-to-conclusion spine *requires* a
   `Hypothesis` node or lets evidence reach a conclusion without one is a
-  Chapter 5 question about the core shape.
+  Chapter 4 question about the core shape.
 - **Naming alignment.** With CiTO adopted, `supports`/`contradicts`/
   `refines` have reuse targets (`cito:supports` / `cito:disputes` or
   `cito:refutes` / `cito:extends`). Whether scimantic *renames* its
   relations to CiTO's or keeps its own names and maps them with
-  `skos:closeMatch` is a Chapter 5/6 call.
+  `skos:closeMatch` is a Chapter 4/6 call.
 - **Status enum versus Stasis state.** v0.2 modeled an act's standing
   as a `status` enum value; the rebuild's *States* kind grounds the same
   idea in CCO Stasis. A slot-valued status or a reified state: the
-  reconsidering surfaced the choice, and Chapter 5 makes it.
+  reconsidering surfaced the choice, and Chapter 4 makes it.
 - **Reuse bindings still deferred.** Beyond the term and hierarchy
   choices above, the Step 2 passes left several *bind-later* calls open:
   SEPIO and Micropublications (cited as the closest models, not bound),
   OBI/OBCS with STATO weighed for the statistics, and URREF carried from
-  Chapter 3. Each is revisited when the class or slot it would attach to
+  Chapter 2. Each is revisited when the class or slot it would attach to
   actually lands.
 
 The last two are not open questions: the competency questions **force**
-them, and Chapter 5 only has to place them in the hierarchy.
+them, and Chapter 4 only has to place them in the hierarchy.
 
 - **`Act` as a real superclass.** CQ 10, 14, and 15 quantify over acts
   generically, so `Act` has to be a shared supertype, not a
@@ -711,8 +711,8 @@ them, and Chapter 5 only has to place them in the hierarchy.
 
 The vocabulary is on the table, enlarged over two passes and trailing
 the new questions and the higher-level candidates the second pass
-surfaced. Chapter 5 takes N&M Step 4,
+surfaced. Chapter 4 takes N&M Step 4,
 sorting these terms into classes and arranging them into a hierarchy
-beneath the BFO and CCO categories Chapter 3 committed to — resolving
+beneath the BFO and CCO categories Chapter 2 committed to — resolving
 the overlaps, the template-versus-instance and slot-versus-class
 choices, and the naming alignments this chapter was free to leave open.

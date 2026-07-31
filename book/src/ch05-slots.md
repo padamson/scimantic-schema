@@ -16,7 +16,7 @@ the class and other items (e.g., the maker of a wine, representing a
 relationship between a wine and a winery, and the grape it is made from).
 ```
 
-ch05 placed the classes; this chapter gives them properties. For
+ch04 placed the classes; this chapter gives them properties. For
 scimantic that means, overwhelmingly, N&M's fourth kind — **relationships
 to other individuals**. The schema models the scientific method as
 *provenance*, and provenance is relational: which act produced a result,
@@ -25,7 +25,7 @@ method an experiment executed. A few slots are intrinsic (a relation's
 strength, an uncertainty's confidence level), but the spine of Step 5 is
 wiring the classes together.
 
-That wiring is where ch04's deferred *implementation* questions and ch05's
+That wiring is where ch03's deferred *implementation* questions and ch04's
 slot-shaped promises come due. They are not independent — every relation
 faces the same handful of questions: how to type it, whether to give it an
 inverse, whether to store or derive it, how many values it takes, and what
@@ -90,7 +90,7 @@ How many values a slot takes is read off the questions, not guessed. A
 `Conclusion` draws on one *or more* premises, so the relation into it is
 multivalued; an `Act` occupies exactly one `TemporalInterval`, so its time
 slot is single and required; a `Hypothesis` is optional in a lineage
-(ch05), so the relation that would reach it cannot be required. The
+(ch04), so the relation that would reach it cannot be required. The
 default is single-valued and optional, tightened to multivalued or
 required only where a competency question demands a collection or a
 mandatory filler. (N&M file cardinality under Step 6; scimantic decides it
@@ -110,7 +110,7 @@ Several relations have an upstream analogue: the claim relations align
 with CiTO, act participation with CCO's process roles. scimantic keeps its
 own names — `supports`, not `cito:supports` — and carries the upstream
 term as an `exact_mappings` (the CiTO mappings are already on
-`supports`/`contradicts`/`refines` from ch05). A domain-fit name reads
+`supports`/`contradicts`/`refines` from ch04). A domain-fit name reads
 better in the schema and in instance data, and the mapping preserves the
 interoperability a rename would buy, without adopting another vocabulary's
 labels wholesale. The rule generalizes: name the relation for scimantic,
@@ -124,7 +124,7 @@ fields the reified classes carry.
 ## The claim relations
 
 The spine's three relations — `supports`, `contradicts`, and `refines` —
-were minted in ch05 as a tracer, carrying only a range and their CiTO
+were minted in ch04 as a tracer, carrying only a range and their CiTO
 mappings. Step 5 gives them the rest of their facets, and they are the
 clearest place to watch the policies bite.
 
@@ -132,7 +132,7 @@ clearest place to watch the policies bite.
 claim, and any kind can sit at either end: evidence supports a conclusion,
 a conclusion refines a hypothesis, one premise contradicts another. The
 range is therefore the shared parent `Claim` — the superclass the spine
-pressed ch05 into minting — not an enumeration of `Hypothesis`, `Evidence`,
+pressed ch04 into minting — not an enumeration of `Hypothesis`, `Evidence`,
 and `Conclusion`. That is N&M's range rule:
 
 ```admonish quote title="Noy & McGuinness 2001 — §Step 5, Domain and range"
@@ -158,7 +158,7 @@ from these edges on demand, never materialized, so it cannot drift from
 them.
 
 Step 5 adds exactly one facet to each — the cardinality — over the bare
-slots ch05 minted:
+slots ch04 minted:
 
 {{#diff scimantic-yaml-v3 scimantic-yaml-v4 context=5 caption="Cardinality on the claim relations"}}
 
@@ -166,7 +166,7 @@ slots ch05 minted:
 records *that* one claim bears on another; it has nowhere to hold *who*
 asserted the support, *when*, or with *what* strength. When a question asks
 for those — and the second pass does — the edge becomes an
-`EvidentialRelation`, the node ch05 placed for exactly this. The bare slot and the reified node are two readings of one
+`EvidentialRelation`, the node ch04 placed for exactly this. The bare slot and the reified node are two readings of one
 link: the slot for the common case, the node when the relation itself
 carries facts. `EvidentialRelation`'s own fields wait for the chapter's
 last cluster.
@@ -188,11 +188,11 @@ property.
 
 `agent` ranges on `Agent`, multivalued (collaborative science gives an act
 more than one), mapped to CCO's *has agent* (`cco:ont00001833`).
-`performedAt` ranges on `TemporalInterval` — ch05's "when is an interval,
+`performedAt` ranges on `TemporalInterval` — ch04's "when is an interval,
 not an instant" — mapped to BFO's *occupies temporal region*
 (`obo:BFO_0000199`).
 
-**`tests` attaches at `DesignOfExperiment`.** ch05 settled that the
+**`tests` attaches at `DesignOfExperiment`.** ch04 settled that the
 prospective intent to test a hypothesis rides on the *design act*, not the
 method it produces, so `tests` (range `Hypothesis`) attaches there alone —
 no other act bears it. It is scimantic's own: the upstream vocabularies
@@ -236,21 +236,32 @@ cover all fillers.
 
 scimantic threads it with an **`any_of` union**: the base range enumerates
 the artifact classes an act can touch, covering every filler without
-inventing a near-THING superclass to retrofit onto ch05's hierarchy. The
+inventing a near-THING superclass to retrofit onto ch04's hierarchy. The
 precise per-act range — `Analysis.hasInput` is a `Dataset`,
 `EvidenceExtraction.hasInput` an `Annotation` — is a `slot_usage`
-refinement, and Chapter 7's central worked example.
+refinement, and Chapter 6's central worked example.
 
 The cluster's six slots, with their CCO/BFO mappings glossed:
 
 {{#diff scimantic-yaml-v4 scimantic-yaml-v5 context=5 caption="Act participation slots"}}
+
+```admonish note title="'Chapter 7' in the listing text"
+The `hasInput` and `hasOutput` descriptions in this snapshot point at
+"Chapter 7" for the per-act narrowing. When they were written, that was
+right: the Introduction was numbered Chapter 1, and every N&M step
+landed one chapter later. The book was renumbered during Chapter 7's
+refinement work so that chapter N matches step N, which moved the
+facets chapter to Chapter 6. Frozen listings keep the bytes they were
+frozen with, so the old number stays in the snapshots here and in the
+diffs that follow; the live schema now says Chapter 6.
+```
 
 With act participation wired, the next cluster turns to the state
 attachments.
 
 ## State attachment
 
-ch05 reified standing as a `State`, grounded in CCO's Stasis — *a process*
+ch04 reified standing as a `State`, grounded in CCO's Stasis — *a process*
 over which a claim holds an unchanging condition. Step 5 wires the three
 relations that make a state a queryable node.
 
@@ -275,7 +286,7 @@ The agent is not a fourth slot. The act that established a state already
 carries its `agent`, so *who set this standing* is **derived** —
 `establishedBy`, then the act's `agent` — not stored twice.
 
-**`promotedFrom` is derived, not a slot.** ch05's evidence-to-premise
+**`promotedFrom` is derived, not a slot.** ch04's evidence-to-premise
 promotion is identity-preserving: the same claim acquires an `AcceptedState`,
 no new node, no edge — so there is nothing to store. *What was this premise
 promoted from* is answered by reading the claim's states (it gained an
@@ -291,7 +302,7 @@ line, and the study.
 
 ## The reified fields
 
-Four of the classes ch05 placed are reifications: each turns a relationship
+Four of the classes ch04 placed are reifications: each turns a relationship
 or a description into a node so it can carry its own provenance. Where
 `supports` is a bare claim-to-claim edge, an `EvidentialRelation` is that
 edge promoted to a node — and a node has to name its own endpoints. So it
@@ -308,7 +319,7 @@ domain and range alike are `Claim`. That raises a question neither
 domain/range nor a facet can answer: may a claim bear on *itself*, and
 does the bearing run both ways? Whether `refines` is irreflexive and
 asymmetric, `contradicts` symmetric, `supports` neither — that is a
-per-relation choice, deferred to Chapter 7, where LinkML's relational
+per-relation choice, deferred to Chapter 6, where LinkML's relational
 slot characteristics can state it.
 
 ### Enumerate what's closed; leave open what isn't
@@ -321,7 +332,7 @@ CiTO `meaning` as the bare slot it mirrors. The reified polarity and the
 lightweight edge then agree by construction, not by a parallel kept up by
 hand. `nature` is the aleatory-versus-epistemic split — irreducible
 randomness versus reducible ignorance — closed, but with no settled IRI:
-it's a plain enum, and the URREF grounding flagged in Chapter 3 stays
+it's a plain enum, and the URREF grounding flagged in Chapter 2 stays
 deferred. `family` — Gaussian, bootstrap, a posterior draw — is open-ended;
 enumerating it would be false precision, so it remains an open string.
 
@@ -332,7 +343,7 @@ enumerating it would be false precision, so it remains an open string.
 is a single relation or a line pooling several pieces of evidence under one
 weight. It is a plain `float` here, as is `UncertaintyModel`'s
 `confidenceLevel`. Their scales and bounds — strength on what interval,
-confidence in [0, 1] — are *facets*, which N&M make Step 6 work; Chapter 7
+confidence in [0, 1] — are *facets*, which N&M make Step 6 work; Chapter 6
 sets them. `UncertaintyModel` also carries a `quantifies` edge to the
 `Uncertainty` quality it models, so the descriptive node and the BFO quality
 it describes are linked, not merely co-present.
@@ -352,4 +363,4 @@ That closes Step 5: every class that needs slots now has them. What is left
 is tightening, not adding — per-act narrowing of `hasInput` / `hasOutput`,
 numeric bounds on `strength` and `confidenceLevel`, requiredness and
 defaults — the facet work N&M reserve for Step 6, and the subject of
-Chapter 7.
+Chapter 6.

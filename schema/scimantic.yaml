@@ -417,7 +417,7 @@ slots:
       - cco:ont00001921
     description: >-
       An artifact an act consumes; ranged broadly over the schema's
-      artifacts here, narrowed per-act in Chapter 7.
+      artifacts here, narrowed per-act in Chapter 6.
 
   # CALLOUT: has-output cco:ont00001986 is CCO "has output" — the generic relation for an act's outputs.
   hasOutput:
@@ -434,7 +434,7 @@ slots:
       - cco:ont00001986
     description: >-
       An artifact an act produces; ranged broadly here, narrowed
-      per-act in Chapter 7's facets.
+      per-act in Chapter 6's facets.
 
   qualifies:
     any_of:

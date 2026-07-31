@@ -26,7 +26,7 @@ refinement that narrows it.
 
 ## Per-act inputs and outputs
 
-ch06 gave every act the same `hasInput` and `hasOutput`: the abstract `Act`
+ch05 gave every act the same `hasInput` and `hasOutput`: the abstract `Act`
 carries both, ranged over the whole artifact union: `Claim`, `Question`,
 `Result`, `Method`, `Dataset`, `Annotation`, `SourceDocument`. That was the
 envelope. This cluster spends it. Each concrete act narrows those two slots,
@@ -83,6 +83,15 @@ of the Step-5 envelope, never more. That is the chapter-opening rule, applied
 nine times.
 
 {{#diff scimantic-yaml-v7 scimantic-yaml-v8 context=5 caption="Per-act inputs and outputs"}}
+
+```admonish note title="'Chapter 7' in the listing text"
+Where the listing text in this chapter says "Chapter 7's facets," it
+means this chapter. The snapshots predate the renumbering (made during
+Chapter 7's refinement work) that aligned chapter numbers with N&M
+steps and moved facets from Chapter 7 to Chapter 6. Frozen listings
+keep their original bytes, so the old number stays; the live schema
+now says Chapter 6.
+```
 
 ## Numeric bounds
 
@@ -144,7 +153,7 @@ since an act can usually be reconstructed from its output alone.
 
 ## Relational characteristics
 
-ch06 left a question open. The claim relations are `Claim`-to-`Claim`:
+ch05 left a question open. The claim relations are `Claim`-to-`Claim`:
 `supports`, `contradicts`, and `refines` take `Claim` as both domain and
 range. That shape raised a question domain and range alone cannot answer:
 may a claim bear on itself, and does a bearing run both ways? The answers
@@ -162,7 +171,7 @@ lowers to an OWL axiom.
 
 All three claim relations are **irreflexive**: no claim bears on itself. A
 claim that supports, contradicts, or refines itself is a small circularity
-the reasoner can now reject, and it is the direct answer to ch06's
+the reasoner can now reject, and it is the direct answer to ch05's
 domain-equals-range question. The relation runs among claims, never from a
 claim back to itself.
 
@@ -186,7 +195,7 @@ The transitive relations in provenance are real, but they are *lineage* and
 *order*, and a slot for each is the wrong place to keep them. scimantic
 stores the atomic edges, `hasInput` and `hasOutput` and the act chain, and
 lets the transitive closures fall out of SPARQL property paths, the same
-store-the-edge-derive-the-aggregate call ch06 made. A symmetric
+store-the-edge-derive-the-aggregate call ch05 made. A symmetric
 `corroborates` would be derivable too, from two claims supporting a common
 target. Transitivity and symmetry are present in the graph; they are
 queried, not declared.

@@ -118,7 +118,7 @@ slots vs. derive from upper-ontology declarations, cardinalities,
 `slot_usage` refinements) are deferred to Chapters 6 and 7.
 
 This list is a **sketch**, not a contract. It informs design;
-Chapter 8 will revisit each question and verify the ontology can
+Chapter 7 will revisit each question and verify the ontology can
 actually answer it.
 
 ## Who will use and maintain the ontology?
@@ -128,7 +128,7 @@ actually answer it.
   that newcomers can extend the schema without archeology.
 - **Methodology stewardship**: mappings to upper- and mid-level
   ontologies (BFO 2020, Common Core Ontologies) require ontology
-  expertise; Chapter 3 starts that work and consults external
+  expertise; Chapter 2 starts that work and consults external
   references for each major term decision.
 - **Downstream maintainers**: consumers such as t2t re-validate
   against their build pipelines on each scimantic-schema release tag.
@@ -183,7 +183,7 @@ what v0.1.0 and v0.2.0 surfaced as useful; Chapters 3 onward will
 likely surface gaps that motivate new questions, and that's not
 failure — it's Rule 2 made operational.
 
-The schema as it stands at the end of Chapter 2 is the **minimal stub**
+The schema as it stands at the end of Chapter 1 is the **minimal stub**
 committed alongside this chapter: just metadata, no classes yet.
-Chapter 3 takes the first concrete step of populating it — reviewing
+Chapter 2 takes the first concrete step of populating it — reviewing
 existing ontologies to decide what to import vs. invent.

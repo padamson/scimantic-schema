@@ -2,7 +2,13 @@
      (reflection-driven polish; freeze scimantic-yaml-v12). Pending: the
      worked-study instantiation (Appendix A) and the dogfood-driven polish
      and validation it pulls. Scaffolding for the unwritten sections is in
-     the comment blocks below. -->
+     the comment blocks below.
+     NOTE for next freeze (v13): schema/scimantic.yaml carries an
+     unfrozen edit — the hasInput/hasOutput descriptions now say
+     "Chapter 6" (post-renumbering; was "Chapter 7"). The v12→v13 diff
+     will surface those two lines; narrate the 2026-07-30 renumbering
+     (Introduction unnumbered, chapter N = step N) alongside whatever
+     schema change triggers the freeze. -->
 
 # Refinement and Validation
 
@@ -29,12 +35,12 @@ what it still lacks. The other is **reflection**, stepping back from the
 finished hierarchy to ask whether every class it accumulated still earns its
 place. This is the one kind of refinement that needs no instances to
 motivate it. N&M's second rule, that ontology development is necessarily
-iterative (Chapter 2), makes both expected. The chapter opens with the
+iterative (Chapter 1), makes both expected. The chapter opens with the
 reflection, because the graph alone made it plain.
 
 ## Culling the uncertainty cluster
 
-At the end of Chapter 7 the schema was complete enough to review as a
+At the end of Chapter 6 the schema was complete enough to review as a
 whole. Its provenance classes form a single connected component in the
 graph: claims, acts, and artifacts linked by `hasInput`, `hasOutput`, and
 the act chain. Four classes stand outside it. `Uncertainty`, `Credibility`,
@@ -46,7 +52,7 @@ question is whether they belong in scimantic at all.
 Two reasons say they do not.
 
 The first is a **category error**. `Uncertainty` and `Credibility` were
-grounded as BFO *qualities* (`obo:BFO_0000019`), and Chapter 5 reasoned that
+grounded as BFO *qualities* (`obo:BFO_0000019`), and Chapter 4 reasoned that
 a result's uncertainty "inheres in the result." But a quality inheres only
 in an **independent continuant**, and the thing it was meant to qualify, a
 `Result`, is not one. A result is an information content entity, a
@@ -58,7 +64,7 @@ BFO splits continuants three ways by how they depend on other things. An
 an organism, a sample, an instrument. A **specifically dependent
 continuant**, such as a quality, exists only by inhering in one particular
 bearer. A **generically dependent continuant** is a pattern of information
-that can be copied across bearers; an ICE is one. Inherence (Chapter 5)
+that can be copied across bearers; an ICE is one. Inherence (Chapter 4)
 runs from a quality to an *independent* continuant, so grounding the
 uncertainty of an information artifact as a quality mismatches the
 categories.
@@ -101,13 +107,13 @@ The removal also settles two threads earlier chapters left open. Chapter
 2's twelfth competency question, *what is the uncertainty model for a given
 result, and how was it derived?*, falls to the data layer rather than
 scimantic, and the validation pass will mark it out of scope. The `[0, 1]`
-bound Chapter 7 placed on `confidenceLevel` is removed with the class that
+bound Chapter 6 placed on `confidenceLevel` is removed with the class that
 carried it; the matching bound on `strength` is unaffected.
 
 {{#diff scimantic-yaml-v11 scimantic-yaml-v12 context=3 caption="Culling the uncertainty cluster"}}
 
 <!-- ============================================================
-CHARTER (set 2026-06-16). ch08 is the dogfooding-driven polish +
+CHARTER (set 2026-06-16). ch07 is the dogfooding-driven polish +
 validation chapter. The worked example is a REAL published study,
 instantiated end-to-end in Appendix A as LinkML instance data. This
 chapter narrates what that dogfood surfaced — the schema refinements it
@@ -122,7 +128,7 @@ the demand, this chapter = the polish it pulls.
 <!-- ============================================================
 CARRIED-IN DEFERRALS → Step 7 (instances + validation).
 
-Every "deferred to Step 7 / Chapter 8 / validation" an earlier
+Every "deferred to Step 7 / Chapter 7 / validation" an earlier
 chapter wrote lands here as a checkbox. Convention: see
 CLAUDE.md › Conventions.
 
@@ -130,7 +136,7 @@ CLAUDE.md › Conventions.
     and surfaced) against instance data as the validation test of
     the vocabulary's shape, not just its contents.
     (Ch 4 §"questions that test shape"; Ch 4 §surfaced —
-    "Chapter 8 will revisit the whole question set")
+    "Chapter 7 will revisit the whole question set")
 [ ] DAG constraint — enforce that the provenance graph is acyclic
     (the one shape-finding Ch 4 recorded). (Ch 4 §"questions that
     test shape")
@@ -161,22 +167,22 @@ Schema polish surfaced dogfooding the viz:
     UncertaintyModel-granularity / nature-URREF deferrals. Credibility is
     derivable from EvidenceAssessment; StatisticalMethod may return later
     as a mixin if a concrete method type needs it. (Done 2026-06-18.)
-[ ] Revisit CQ #12 + the ch02 uncertainty anticipation in the CQ litmus —
-    ch08 work, NOT a ch02 edit. ch02 deliberately keeps CQ #12 ("what is
+[ ] Revisit CQ #12 + the ch01 uncertainty anticipation in the CQ litmus —
+    ch07 work, NOT a ch01 edit. ch01 deliberately keeps CQ #12 ("what is
     the uncertainty model for a given result, and how was it derived?") and
     its inclusion-list "uncertainty representation (URREF-derived
     qualities)" as the chronological record of a planned-then-culled path.
     The CQ-litmus section revisits CQ #12 and reports that scimantic does
     not answer it: it relocates to the data layer (DQV on the
-    dcat:Dataset), out of scope here. Closes the loop ch02 promised
-    ("Chapter 8 will revisit each question"); the culling section already
+    dcat:Dataset), out of scope here. Closes the loop ch01 promised
+    ("Chapter 7 will revisit each question"); the culling section already
     foreshadows it ("the validation pass will mark it out of scope").
-    (Decided 2026-06-18: handle in ch08, not ch02.)
+    (Decided 2026-06-18: handle in ch07, not ch01.)
 [ ] Study is_a Act? — Study is a sibling of Act (both subclass_of CCO
     Planned Act), so it carries only hasPart, not agent / performedAt /
     hasInput / hasOutput. If a study should have a PI, a timespan, and a
     question-in / conclusion-out, make Study is_a Act (inheriting those
-    plus hasPart). A class-hierarchy change (Step 4), surfaced in ch07's
+    plus hasPart). A class-hierarchy change (Step 4), surfaced in ch06's
     cluster-4 discussion. (Surfaced 2026-06-17.)
 =============================================================
 -->

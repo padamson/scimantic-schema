@@ -24,3 +24,15 @@ number-listings = true
 [output.html]
 additional-css = ["./mdbook-admonish.css", "./mdbook-listings.css"]
 additional-js = ["./mdbook-listings.js"]
+
+# Pre-2026-07-30 chapter URLs (intro was numbered ch01, offsetting every
+# N&M step by one). Keep old deep links working after the renumbering.
+[output.html.redirect]
+"/ch01-introduction.html" = "introduction.html"
+"/ch02-domain-and-scope.html" = "ch01-domain-and-scope.html"
+"/ch03-reusing-existing-ontologies.html" = "ch02-reusing-existing-ontologies.html"
+"/ch04-important-terms.html" = "ch03-important-terms.html"
+"/ch05-classes-and-hierarchy.html" = "ch04-classes-and-hierarchy.html"
+"/ch06-slots.html" = "ch05-slots.html"
+"/ch07-slot-usage-and-facets.html" = "ch06-slot-usage-and-facets.html"
+"/ch08-refinement-and-validation.html" = "ch07-refinement-and-validation.html"
