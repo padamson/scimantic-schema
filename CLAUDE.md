@@ -57,8 +57,10 @@ conventions on top of the plugin:
   go *inline* as `# CALLOUT:` markers — never sidecar TOML, which is
   reserved for generated/third-party/no-comment-syntax listings.
 - **Integrity check:** `mdbook build` exiting 0 already fails on a
-  missing `{{#callout}}` label or a broken `{{#include}}`
-  (`mdbook-listings verify` is still a stub).
+  missing `{{#callout}}` label or a broken `{{#include}}`;
+  `mdbook-listings verify --book-root book` additionally checks every
+  frozen listing against its recorded SHA-256 (also enforced by the
+  pre-commit hook).
 
 ### Dev loop (`scripts/dev.sh`) and the freeze foot-gun
 

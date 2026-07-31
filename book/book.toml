@@ -18,6 +18,13 @@ assets_version = "3.1.0" # do not edit: managed by `mdbook-admonish install`
 command = "mdbook-listings"
 before = ["admonish", "links"]
 number-listings = true
+# In-page {{#list-of-listings}} index (see src/list-of-listings.md).
+list-of-listings = true
+# "nested" puts each page's listings under their section heading in the
+# per-page TOC. NOT "append", whose book-wide section overlays mdbook's
+# TOC with this theme (ontology-authoring-template dogfood finding,
+# filed to mdbook-listings 2026-07-27).
+list-of-listings-sidebar = "nested"
 
 [output]
 
