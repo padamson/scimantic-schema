@@ -161,12 +161,17 @@ Schema polish surfaced dogfooding the viz:
     UncertaintyModel-granularity / nature-URREF deferrals. Credibility is
     derivable from EvidenceAssessment; StatisticalMethod may return later
     as a mixin if a concrete method type needs it. (Done 2026-06-18.)
-[ ] Reconcile ch02 grounding-prose — ch02 §"what questions" still lists
-    "uncertainty representation (URREF-derived qualities on relevant
-    artifacts)" (~line 112) among what the ontology will include, now
-    false after the cull. Narrate forward or trim; ch02 frames the list as
-    a provisional sketch, so a light touch fits. CQ #12 itself is handled
-    in §"Culling the uncertainty cluster". (Surfaced 2026-06-18.)
+[ ] Revisit CQ #12 + the ch02 uncertainty anticipation in the CQ litmus —
+    ch08 work, NOT a ch02 edit. ch02 deliberately keeps CQ #12 ("what is
+    the uncertainty model for a given result, and how was it derived?") and
+    its inclusion-list "uncertainty representation (URREF-derived
+    qualities)" as the chronological record of a planned-then-culled path.
+    The CQ-litmus section revisits CQ #12 and reports that scimantic does
+    not answer it: it relocates to the data layer (DQV on the
+    dcat:Dataset), out of scope here. Closes the loop ch02 promised
+    ("Chapter 8 will revisit each question"); the culling section already
+    foreshadows it ("the validation pass will mark it out of scope").
+    (Decided 2026-06-18: handle in ch08, not ch02.)
 [ ] Study is_a Act? — Study is a sibling of Act (both subclass_of CCO
     Planned Act), so it carries only hasPart, not agent / performedAt /
     hasInput / hasOutput. If a study should have a PI, a timespan, and a
