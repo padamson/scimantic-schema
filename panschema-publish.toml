@@ -21,3 +21,12 @@ format = "html"
 # and the github.io deploy). The panschema default "../current/" assumes a
 # standalone schema-only deploy and is wrong for this book-nested layout.
 site_root_url = "../../"
+
+# Book-header toolbar button linking to the schema docs (panschema
+# feature 21). Assets are dropped by `mdbook-panschema install` into
+# book/ and, unlike the template repos, committed (matching this
+# repo's committed-asset convention for mdbook-admonish.css).
+[book_link]
+enabled = true
+schema_path = "schema/current/"
+label = "Schema reference"
