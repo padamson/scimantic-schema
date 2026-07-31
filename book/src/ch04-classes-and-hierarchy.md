@@ -136,7 +136,7 @@ In the schema, that is `State` and its three standings, each grounded in
 CCO Stasis {{#callout stasis}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:160:187 caption="The three standings"}}
+{{#include listings/scimantic-yaml-v3.yaml:160:187 label="standings" caption="The three standings"}}
 ```
 
 ### Evidence and Premise: one claim, two standings
@@ -167,8 +167,10 @@ queryable, and `promotedFrom` a transition rather than a phrase, is
 Step 5 work that lands in Chapter 5. The listings here show the
 participating classes; the slots that carry a promotion come with the
 rest of the slot work. This is also why the three pieces sit in three
-different listings below — the claim layer, the states, and the acts —
-rather than in one place: nothing yet binds them into a single view.
+different listings below — the claim layer ({{#listing-ref claim-layer}}),
+the states ({{#listing-ref standings}}), and the acts
+({{#listing-ref nine-acts}}) — rather than in one place: nothing yet
+binds them into a single view.
 
 One distinction still earns a name. *Accepted* is a state, the outcome
 of assessment. *Premise* is better read as a **role**, in BFO's sense of
@@ -209,7 +211,7 @@ Descriptive Information Content Entity {{#callout ice}} by `subclass_of`
 {{#callout grounding}}, over `Hypothesis`, `Evidence`, and `Conclusion`:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:45:78 caption="The claim layer"}}
+{{#include listings/scimantic-yaml-v3.yaml:45:78 label="claim-layer" caption="The claim layer"}}
 ```
 
 It carries the three claim relations, mapped to CiTO and bound for
@@ -281,7 +283,7 @@ And the nine acts that realize them, under the `Act` supertype
 {{#callout planned-act}}:
 
 ```yaml
-{{#include listings/scimantic-yaml-v3.yaml:80:137 caption="The nine acts"}}
+{{#include listings/scimantic-yaml-v3.yaml:80:137 label="nine-acts" caption="The nine acts"}}
 ```
 
 With method and act placed, the next cluster asks when a value or an
