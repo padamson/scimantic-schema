@@ -1,3 +1,4 @@
 output/
 site/
 book/build/
+.dev.pid

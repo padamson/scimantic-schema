@@ -17,8 +17,8 @@
 # you refresh manually.
 #
 # Usage:
-#   ./scripts/dev.sh                 # PORT=8000 (default)
-#   PORT=8080 ./scripts/dev.sh
+#   ./scripts/dev.sh                 # first free port at or above 8000
+#   PORT=8080 ./scripts/dev.sh      # first free port at or above 8080
 #   SKIP_PRODUCER_BUILD=1 ./scripts/dev.sh
 #       Don't build or watch the producers; use the binaries already on
 #       PATH and only regenerate the site on schema/book changes. Use when
@@ -49,7 +49,48 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-PORT="${PORT:-8000}"
+# --- Stop any prior dev loop for THIS repo ---
+
+# A previous run that wasn't fully torn down leaves a stale watcher racing
+# our rebuilds and a stale server serving the OLD site/ — the "callouts seem
+# missing" foot-gun. The PID file scopes cleanup to this repo: a pkill by
+# command line would also hit other schema books, whose watchexec/rebuild.sh
+# invocations are identical.
+PID_FILE=".dev.pid"
+if [ -f "$PID_FILE" ]; then
+  old_pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+  if [ -n "$old_pid" ] && kill -0 "$old_pid" 2>/dev/null; then
+    echo "Stopping previous dev loop (PID $old_pid)"
+    pkill -TERM -P "$old_pid" 2>/dev/null || true
+    kill -TERM "$old_pid" 2>/dev/null || true
+    # Give it a moment to release its port before we scan for a free one.
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+      kill -0 "$old_pid" 2>/dev/null || break
+      sleep 0.2
+    done
+  fi
+  rm -f "$PID_FILE"
+fi
+echo $$ > "$PID_FILE"
+
+# --- Pick a port ---
+
+# First free TCP port at or above PORT (default 8000). Other servers on the
+# starting port (another book's dev loop, an unrelated project) are stepped
+# over, not killed — only this repo's own stale instance is cleaned up above.
+if ! command -v lsof >/dev/null 2>&1; then
+  echo "warning: lsof not found — can't check for busy ports; using PORT as-is." >&2
+fi
+free_port() {
+  local port="$1"
+  if command -v lsof >/dev/null 2>&1; then
+    while lsof -iTCP:"$port" -sTCP:LISTEN -t >/dev/null 2>&1; do
+      port=$((port + 1))
+    done
+  fi
+  echo "$port"
+}
+PORT="$(free_port "${PORT:-8000}")"
 export PORT
 
 # When set, skip building/watching the producers (panschema, mdbook-listings,
@@ -120,16 +161,21 @@ scripts/rebuild.sh
 
 # --- HTTP server ---
 
+# Launch the server directly, NOT in a `( cd site && … ) &` subshell: with a
+# subshell, $! is the subshell's PID, not the server's, so cleanup would kill
+# the wrapper and orphan the real server — manufacturing exactly the stale
+# squatter the PID-file cleanup above exists to catch. Pass the directory as
+# an argument instead, so SERVER_PID is the process we actually need to kill.
 if command -v live-server >/dev/null 2>&1; then
   echo ""
   echo "Starting live-server on http://localhost:$PORT/ (browser auto-reload)"
-  (cd site && live-server --port="$PORT" --no-browser --quiet) &
+  live-server --port="$PORT" --no-browser --quiet site &
 else
   echo ""
   echo "Starting python3 -m http.server on http://localhost:$PORT/"
   echo "  (no auto-reload; refresh the browser manually after each rebuild)"
   echo "  Tip: npm install -g live-server  # for browser auto-reload"
-  (cd site && python3 -m http.server "$PORT" >/dev/null 2>&1) &
+  python3 -m http.server "$PORT" --directory site >/dev/null 2>&1 &
 fi
 SERVER_PID=$!
 
@@ -137,6 +183,7 @@ cleanup() {
   echo ""
   echo "Stopping server (PID $SERVER_PID)"
   kill "$SERVER_PID" 2>/dev/null || true
+  rm -f "$PID_FILE"
 }
 # EXIT covers all paths (Ctrl+C, set -e bail-out, normal exit).
 trap cleanup EXIT
