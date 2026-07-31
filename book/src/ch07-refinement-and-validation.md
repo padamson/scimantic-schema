@@ -8,7 +8,10 @@
      "Chapter 6" (post-renumbering; was "Chapter 7"). The v12→v13 diff
      will surface those two lines; narrate the 2026-07-30 renumbering
      (Introduction unnumbered, chapter N = step N) alongside whatever
-     schema change triggers the freeze. -->
+     schema change triggers the freeze. Optionally also unfold the >-
+     folded description scalars at that freeze (tier 2 of the
+     soft-wrap dogfood — the folds only dodged a fixed badge bug;
+     see book/soft-wrap.css). -->
 
 # Refinement and Validation
 

@@ -29,7 +29,7 @@ list-of-listings-sidebar = "nested"
 [output]
 
 [output.html]
-additional-css = ["./mdbook-admonish.css", "./mdbook-listings.css"]
+additional-css = ["./mdbook-admonish.css", "./mdbook-listings.css", "./soft-wrap.css"]
 additional-js = ["./mdbook-listings.js"]
 
 # Pre-2026-07-30 chapter URLs (intro was numbered ch01, offsetting every

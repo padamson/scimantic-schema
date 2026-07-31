@@ -1,0 +1,10 @@
+/* Soft-wrap long listing lines instead of horizontal scroll.
+ * Safe since mdbook-listings d6c6789 (v0.1.1): callout badges anchor
+ * to each line's measured box, so wrapped lines can't drift them.
+ * Tier 2 (later): unfold the `>-` hand-folded descriptions in
+ * schema/scimantic.yaml at a natural freeze point — the folds only
+ * ever existed to dodge the pre-d6c6789 badge drift. */
+pre,
+pre code {
+  white-space: pre-wrap;
+}
