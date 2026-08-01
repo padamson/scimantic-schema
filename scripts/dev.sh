@@ -4,7 +4,7 @@
 # Simulate GitHub Pages locally with hot reload across:
 #   - the schema source (`schema/scimantic.yaml`)
 #   - the book source (`book/src/`, `book/*.toml`)
-#   - PRODUCER source code (panschema, mdbook-listings, mdbook-admonish)
+#   - PRODUCER source code (panschema, mdbook-admonish)
 #
 # Editing any of these triggers a full rebuild: refreshes producer debug
 # binaries (incremental `cargo build`), then regenerates the book and
@@ -39,8 +39,10 @@
 #       cargo install watchexec-cli
 #
 # Requires (in adjacent producer repos under ~/src/github-padamson/):
-#   - panschema/, mdbook-listings/, mdbook-admonish/ cloned with working
-#     trees. Any missing producer is skipped with a warning.
+#   - panschema/, mdbook-admonish/ cloned with working trees. Any
+#     missing producer is skipped with a warning. (mdbook-listings is a
+#     released tool since v0.1.1 — installed from crates.io, not built
+#     as a producer.)
 #
 # Optional:
 #   - live-server (npm) for in-browser auto-reload:
@@ -93,7 +95,7 @@ free_port() {
 PORT="$(free_port "${PORT:-8000}")"
 export PORT
 
-# When set, skip building/watching the producers (panschema, mdbook-listings,
+# When set, skip building/watching the producers (panschema,
 # mdbook-admonish); use the binaries on PATH and only regenerate the site.
 SKIP_PRODUCER_BUILD="${SKIP_PRODUCER_BUILD:-}"
 export SKIP_PRODUCER_BUILD
@@ -133,12 +135,12 @@ watch_args=(
 
 # Producer source paths. For each producer repo present locally, watch:
 #   - top-level Cargo.toml
-#   - top-level src/ if present (single-crate repos: mdbook-listings, mdbook-admonish)
+#   - top-level src/ if present (single-crate repos: mdbook-admonish)
 #   - any workspace sub-crate's Cargo.toml + src/ (panschema's workspace
 #     has panschema/, panschema-viz/)
 # Crucially do NOT watch the whole repo — target/ would create a rebuild loop.
 producer_dirs=()
-for producer in panschema mdbook-listings mdbook-admonish; do
+for producer in panschema mdbook-admonish; do
   # SKIP_PRODUCER_BUILD: don't watch producer source — you're driving the
   # producer's build in its own repo, so leave it out of this loop.
   [ -n "${SKIP_PRODUCER_BUILD:-}" ] && break

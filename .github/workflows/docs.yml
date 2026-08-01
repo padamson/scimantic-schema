@@ -40,13 +40,13 @@ jobs:
           sha=$(gh api repos/padamson/panschema/commits/main --jq .sha)
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-      - name: Resolve latest mdbook-listings main SHA
+      - name: Resolve latest mdbook-listings release version
         id: mdbook-listings
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          sha=$(gh api repos/padamson/mdbook-listings/commits/main --jq .sha)
-          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          version=$(gh api repos/padamson/mdbook-listings/releases/latest --jq .tag_name | sed 's/^v//')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Resolve mdbook-admonish fork branch SHA
         id: mdbook-admonish
@@ -113,18 +113,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cargo/bin/mdbook-listings
-          key: mdbook-listings-${{ runner.os }}-${{ steps.mdbook-listings.outputs.sha }}
+          key: mdbook-listings-${{ runner.os }}-${{ steps.mdbook-listings.outputs.version }}
 
-      - name: Install mdbook-listings from main
-        # Dogfood producer: tracks the tip of mdbook-listings main so the
-        # published docs exercise post-v0.1.0 features. The cache key is the
-        # resolved SHA, so a new commit busts the cache and rebuilds.
+      - name: Install mdbook-listings
+        # Released tool since v0.1.1: install the crates.io release
+        # (resolved above so the cache busts on a new release). Re-pin to
+        # git main only for a future prerelease dogfood window.
         if: steps.cache-mdbook-listings.outputs.cache-hit != 'true'
         run: |
-          cargo install --git https://github.com/padamson/mdbook-listings \
-            --rev ${{ steps.mdbook-listings.outputs.sha }} \
-            --locked --force \
-            mdbook-listings
+          cargo install mdbook-listings \
+            --version ${{ steps.mdbook-listings.outputs.version }} \
+            --locked --force
 
       - name: Cache mdbook-admonish binary
         id: cache-mdbook-admonish
