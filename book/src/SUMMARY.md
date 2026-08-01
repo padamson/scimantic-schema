@@ -11,8 +11,4 @@
 - [Refinement and Validation](ch07-refinement-and-validation.md)
 - [Publishing and Consumption]()
 
-# Appendix
-
-- [A — A Worked Study]()
-
 [List of Listings](list-of-listings.md)

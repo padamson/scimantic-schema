@@ -1,17 +1,16 @@
 <!-- IN PROGRESS. Written: intro + §"Culling the uncertainty cluster"
-     (reflection-driven polish; freeze scimantic-yaml-v12). Pending: the
-     worked-study instantiation (Appendix A) and the dogfood-driven polish
-     and validation it pulls. Scaffolding for the unwritten sections is in
+     (freeze v12) + §"What a data file needs that a schema did not"
+     (freeze v13: id slot, ProvenanceRecord container, Study is_a Act,
+     renumbering narration). Pending: the intro instance-graph preview
+     (inserts between the culling and data-file-needs sections once the
+     preview data file exists), the worked example (positron
+     meta-analysis; Appendix A), validation, the SPARQL CQ litmus, and
+     the graphRAG section. Scaffolding for unwritten sections is in
      the comment blocks below.
-     NOTE for next freeze (v13): schema/scimantic.yaml carries an
-     unfrozen edit — the hasInput/hasOutput descriptions now say
-     "Chapter 6" (post-renumbering; was "Chapter 7"). The v12→v13 diff
-     will surface those two lines; narrate the 2026-07-30 renumbering
-     (Introduction unnumbered, chapter N = step N) alongside whatever
-     schema change triggers the freeze. Optionally also unfold the >-
-     folded description scalars at that freeze (tier 2 of the
-     soft-wrap dogfood — the folds only dodged a fixed badge bug;
-     see book/soft-wrap.css). -->
+     NOTE: the >- unfold (soft-wrap tier 2) is deliberately NOT done —
+     the folds also satisfy the repo's 72-col schema line-width hook,
+     so they are policy now, not a badge-bug workaround. Decided
+     2026-07-31; book/soft-wrap.css comment corrected to match. -->
 
 # Refinement and Validation
 
@@ -115,6 +114,57 @@ carried it; the matching bound on `strength` is unaffected.
 
 {{#diff scimantic-yaml-v11 scimantic-yaml-v12 context=3 caption="Culling the uncertainty cluster"}}
 
+## What a data file needs that a schema did not
+
+The dogfood direction starts before the first record is written.
+scimantic's worked example is a data file: LinkML instance data,
+records conforming to the schema's classes, held apart from the schema
+itself. Trying to write one surfaced three things six chapters of
+schema building never needed, and each lands here as a refinement —
+new freezes, not retro-edits to earlier snapshots.
+
+The first is an **identifier**. Instances form a provenance graph with
+shared references: one act's output is another act's input, a state
+points back at the act that established it, an evidential relation
+names two claims. A reference needs something to point *at*, and no
+scimantic class had a key. The new `id` slot ({{#callout identifier}})
+is marked `identifier: true` and joins every referenceable class, so
+`hasInput: [ghosh-2022-eb]` in a record means the node carrying that
+id. Identifiers are unique across a whole file, not per class — two
+records may not share one even when their classes differ.
+
+The second is a **root**. A YAML file holds one document, and a
+document conforming to a schema must *be* an instance of some class —
+so the schema needs a class whose instances are data files.
+`ProvenanceRecord` ({{#callout record}}) is that class, marked
+`tree_root: true`, holding one multivalued collection per concrete
+class plus a `title` and `description` for the file itself. Its
+collections are `attributes:` rather than entries in the shared
+`slots:` block: they exist only on the container, and the container
+exists only because a data file needs a root.
+
+The third the schema had seen coming. Chapter 6's relational
+discussion left open whether `Study` should stay a sibling of `Act` —
+both grounded in CCO Planned Act, with `Study` carrying only
+`hasPart` — or become an act itself. Building the record forced the
+call: a study has a principal investigator, which is `agent`; it runs
+over a timespan, which is `performedAt`; and one question goes in and
+one concluding claim comes out, which are `hasInput` and `hasOutput`
+narrowed to `Question` and `Conclusion`. So `Study` is now `is_a Act`
+({{#callout study-act}}), inheriting the act slots and the Planned Act
+grounding through `Act` instead of declaring its own.
+
+One more change rides this freeze without being schema design at all.
+Between the last freeze and this one the book was renumbered: the
+Introduction became an unnumbered prefix chapter, so each chapter now
+carries the number of the N&M step it applies. Two slot descriptions
+that pointed at "Chapter 7" for the per-act narrowing now say
+Chapter 6, and the diff shows the edit. The frozen listings of earlier
+chapters keep the bytes they were frozen with — where one renders the
+old number, a note beside it says why.
+
+{{#diff scimantic-yaml-v12 scimantic-yaml-v13 context=3 label="data-file-needs" caption="What a data file needs"}}
+
 <!-- ============================================================
 CHARTER (set 2026-06-16). ch07 is the dogfooding-driven polish +
 validation chapter. The worked example is a REAL published study,
@@ -145,11 +195,10 @@ CLAUDE.md › Conventions.
     test shape")
 
 Prerequisites the real-study dogfood (Appendix A) forces:
-[ ] Identifiers — instances form a provenance DAG with SHARED
-    references (one act's output is another's input), so add an
-    identifier slot (identifier: true) so hasInput/hasOutput/hasPart
-    can point at a node by id. Currently zero identifier slots — this
-    blocks instance authoring; lands as a schema polish (new freeze).
+[x] Identifiers — id slot (identifier: true) on every referenceable
+    class, plus the ProvenanceRecord tree_root container. Froze
+    scimantic-yaml-v13; narrated in §"What a data file needs".
+    (Done 2026-07-31.)
 [ ] linkml-validate in CI — the structural proof that the study's
     instance data conforms to the schema. External tool (not
     panschema); wire into the docs/CI workflow.
@@ -181,12 +230,10 @@ Schema polish surfaced dogfooding the viz:
     ("Chapter 7 will revisit each question"); the culling section already
     foreshadows it ("the validation pass will mark it out of scope").
     (Decided 2026-06-18: handle in ch07, not ch01.)
-[ ] Study is_a Act? — Study is a sibling of Act (both subclass_of CCO
-    Planned Act), so it carries only hasPart, not agent / performedAt /
-    hasInput / hasOutput. If a study should have a PI, a timespan, and a
-    question-in / conclusion-out, make Study is_a Act (inheriting those
-    plus hasPart). A class-hierarchy change (Step 4), surfaced in ch06's
-    cluster-4 discussion. (Surfaced 2026-06-17.)
+[x] Study is_a Act? — decided YES: Study is_a Act with hasInput →
+    Question and hasOutput → Conclusion narrowings, inheriting agent /
+    performedAt and the Planned Act grounding through Act. Froze in
+    v13; narrated in §"What a data file needs". (Decided 2026-07-31.)
 =============================================================
 -->
 
