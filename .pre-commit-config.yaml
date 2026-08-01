@@ -32,3 +32,19 @@ repos:
         language: system
         pass_filenames: false
         files: ^schema/scimantic\.yaml$
+
+      - id: panschema-validate
+        name: panschema validate (curated instance data conforms)
+        # A curated A-box published to the docs site is a conformance
+        # claim; `publish` only warns, so gate it here. Validates every
+        # data/*.yaml against the schema; non-zero on any violation.
+        # nullglob keeps it a no-op until data files exist.
+        entry: >-
+          bash -c 'shopt -s nullglob;
+          for f in data/*.yaml; do
+          echo "validate $f";
+          panschema validate --schema schema/scimantic.yaml --data "$f" || exit 1;
+          done'
+        language: system
+        pass_filenames: false
+        files: ^(schema/scimantic\.yaml|data/.*\.yaml)$

@@ -143,6 +143,18 @@ jobs:
 
       # --- Build outputs ---
 
+      - name: Validate curated instance data (panschema)
+        # A curated A-box published to the site is a conformance claim;
+        # `publish` only warns on violations, so fail fast here before
+        # building anything. nullglob makes this a no-op until the data
+        # files land (ch07), so it is safe to ship ahead of them.
+        run: |
+          shopt -s nullglob
+          for f in data/*.yaml; do
+            echo "validate $f"
+            panschema validate --schema schema/scimantic.yaml --data "$f"
+          done
+
       - name: Publish versioned schema docs (panschema)
         # Output layout: site/schema/v0.1.0/, site/schema/v0.2.0/,
         # site/schema/main/, site/schema/current/ (alias for the

@@ -117,9 +117,14 @@ fi
 
 # --- Build watch path list ---
 
+# data/ holds the curated instance files (ch07+); ensure it exists so
+# watchexec has a path to watch on a fresh clone.
+mkdir -p data
+
 # This repo's source/config files.
 watch_args=(
   --watch schema
+  --watch data
   --watch book/src
   --watch book/book.toml
   --watch book/listings.toml
@@ -192,7 +197,7 @@ trap cleanup EXIT
 
 echo ""
 echo "Watching for changes in:"
-echo "  schema/, book/src/, book/*.toml, panschema-publish.toml"
+echo "  schema/, data/, book/src/, book/*.toml, panschema-publish.toml"
 for p in "${producer_dirs[@]}"; do
   echo "  $p source (producer dogfood)"
 done
