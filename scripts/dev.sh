@@ -212,5 +212,6 @@ watchexec \
   --debounce 500ms \
   --no-vcs-ignore \
   --clear \
+  --postpone \
   "${watch_args[@]}" \
   -- scripts/rebuild.sh
