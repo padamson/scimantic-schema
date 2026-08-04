@@ -129,8 +129,8 @@ points back at the act that established it, an evidential relation
 names two claims. A reference needs something to point *at*, and no
 scimantic class had a key. The new `id` slot ({{#callout identifier}})
 is marked `identifier: true` and joins every referenceable class, so
-`hasInput: [ghosh-2022-eb]` in a record means the node carrying that
-id. Identifiers are unique across a whole file, not per class — two
+`hasInput: [upstream-result]` in a record means the node carrying
+that id. Identifiers are unique across a whole file, not per class — two
 records may not share one even when their classes differ.
 
 The second is a **root**. A YAML file holds one document, and a
