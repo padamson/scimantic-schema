@@ -66,12 +66,14 @@ echo "==> [$(ts)] Rebuild the combined site:"
 (
   cd book
   mdbook-listings install >/dev/null 2>&1
-  # Guarded (missing-file check), not unconditional: `mdbook-panschema
-  # install` rewrites book.toml, which the watcher watches — running it
-  # every cycle would loop the watch. The assets are committed; this
-  # only re-drops them if they vanish.
-  { [ -f schema-link.css ] && [ -f schema-link.js ]; } || \
-    mdbook-panschema install >/dev/null 2>&1
+  # Guarded (missing-file check), not unconditional: the admonish and
+  # panschema-link installers rewrite book.toml, which the watcher
+  # watches — running them every cycle would loop the watch. The assets
+  # are gitignored (generated); this regenerates them when absent, e.g.
+  # on a fresh clone. Standalone path: scripts/install-assets.sh.
+  { [ -f mdbook-admonish.css ] && [ -f schema-link.css ] \
+      && [ -f schema-link.js ]; } || \
+    ../scripts/install-assets.sh >/dev/null 2>&1
   mdbook build
 )
 

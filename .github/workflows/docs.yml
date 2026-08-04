@@ -60,12 +60,19 @@ jobs:
 
       # --- panschema (needs wasm-pack as a build prerequisite) ---
 
-      - name: Cache panschema binary
+      - name: Cache panschema binaries
         id: cache-panschema
         uses: actions/cache@v4
         with:
-          path: ~/.cargo/bin/panschema
-          key: panschema-${{ runner.os }}-${{ steps.panschema.outputs.sha }}
+          # panschema (schema docs) + mdbook-panschema (book-to-schema
+          # toolbar-link installer) build from the same workspace at the
+          # same rev. The `-bins-` key prefix (vs the old `panschema-`)
+          # deliberately busts pre-mdbook-panschema cache entries that
+          # hold only the one binary.
+          path: |
+            ~/.cargo/bin/panschema
+            ~/.cargo/bin/mdbook-panschema
+          key: panschema-bins-${{ runner.os }}-${{ steps.panschema.outputs.sha }}
 
       - name: Cache wasm-pack binary
         if: steps.cache-panschema.outputs.cache-hit != 'true'
@@ -86,6 +93,10 @@ jobs:
             --rev ${{ steps.panschema.outputs.sha }} \
             --locked --force \
             panschema
+          cargo install --git https://github.com/padamson/panschema \
+            --rev ${{ steps.panschema.outputs.sha }} \
+            --locked --force \
+            mdbook-panschema
 
       # --- mdbook + preprocessors ---
 
@@ -163,11 +174,14 @@ jobs:
         # new version so /schema/current/ aliases to it post-deploy.
         run: panschema publish
 
-      - name: Restore mdbook-listings book assets
-        # mdbook-listings.css / .js are gitignored upstream; install
-        # repopulates them in book/ before mdbook build runs.
-        working-directory: book
-        run: mdbook-listings install
+      - name: Generate book assets
+        # The admonish/listings/schema-link CSS+JS are gitignored
+        # generated assets (soft-wrap.css is hand-authored and tracked),
+        # so a fresh CI checkout lacks them and `mdbook build` fails
+        # copying mdbook-admonish.css. install-assets.sh regenerates all
+        # three from the binaries installed above — the same script a
+        # fresh clone uses locally, so CI and local share one path.
+        run: ./scripts/install-assets.sh
 
       - name: Verify frozen listings (mdbook-listings)
         # Fail fast on frozen-snapshot hash drift or a broken
